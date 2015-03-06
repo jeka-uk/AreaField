@@ -17,7 +17,7 @@ public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LOCATION_LONGITUDE = "longitude";
     private static final String COLUMN_LOCATION_ALTITUDE = "altitude";
     private static final String COLUMN_LOCATION_SPEED = "speed";    
-    private static final String COLUMN_LOCATION_LOCATION_ID = "_id";
+    //private static final String COLUMN_LOCATION_LOCATION_ID = "_id";
 	
 	public AreaFieldDatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);

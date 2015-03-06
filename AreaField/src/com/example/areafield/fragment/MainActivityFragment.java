@@ -2,6 +2,7 @@ package com.example.areafield.fragment;
 
 
 import com.example.areafield.R;
+import com.example.areafield.dbHelper.AreaFieldDatabaseHelper;
 
 
 import android.content.Context;
@@ -25,12 +26,16 @@ public class MainActivityFragment extends Fragment {
 			run_speedTextView, run_altitudeTextView;
 	private Button run_startButton, run_stopButton;
 	
+	private AreaFieldDatabaseHelper mAreaFieldDatabaseHelper;
+	
 	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
+		
+		mAreaFieldDatabaseHelper = new AreaFieldDatabaseHelper(getActivity());
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
