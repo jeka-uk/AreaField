@@ -1,5 +1,6 @@
 package com.example.areafield.fragment;
 
+
 import com.example.areafield.R;
 
 
@@ -23,6 +24,8 @@ public class MainActivityFragment extends Fragment {
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView;
 	private Button run_startButton, run_stopButton;
+	
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,6 +105,8 @@ public class MainActivityFragment extends Fragment {
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString(location.getSpeed()*3.6));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+			
+		
 	}
 
 }

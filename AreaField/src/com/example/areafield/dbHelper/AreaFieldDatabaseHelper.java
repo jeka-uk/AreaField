@@ -1,4 +1,4 @@
-package com.example.areafield;
+package com.example.areafield.dbHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,7 +27,7 @@ public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		// create the "location" table
-	    db.execSQL("create table location (_id integer primary key autoincrement, latitude real, longitude real, altitude real, speed integer");
+	    db.execSQL("create table location (_id integer primary key autoincrement, latitude real, longitude real, altitude real, speed real");
 		
 	}
 
@@ -37,13 +37,13 @@ public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	
-	 public long insertLocation(long locId, Location location) {
+	 public long insertLocation( Location location) {
 	        ContentValues cv = new ContentValues();
 	        cv.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
 	        cv.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
 	        cv.put(COLUMN_LOCATION_ALTITUDE, location.getAltitude());
 	        cv.put(COLUMN_LOCATION_SPEED, location.getSpeed()*3.6);	        
-	        cv.put(COLUMN_LOCATION_LOCATION_ID, locId);
+	        //cv.put(COLUMN_LOCATION_LOCATION_ID, locId);
 	        return getWritableDatabase().insert(TABLE_LOCATION, null, cv);
 	    }
 
