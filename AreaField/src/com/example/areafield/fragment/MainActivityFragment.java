@@ -2,6 +2,7 @@ package com.example.areafield.fragment;
 
 import com.example.areafield.R;
 
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -99,7 +100,7 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(Double.toString(location.getSpeed()));
+		run_speedTextView.setText(Double.toString(location.getSpeed()*3.6));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 	}
 
