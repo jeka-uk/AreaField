@@ -9,15 +9,14 @@ import android.location.Location;
 
 public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {	
 	 
-	private static final String DB_NAME = "location.sqlite";
+	private static final String DB_NAME = "location";
 	private static final int VERSION = 1;
 	
 	private static final String TABLE_LOCATION = "location";
     private static final String COLUMN_LOCATION_LATITUDE = "latitude";
     private static final String COLUMN_LOCATION_LONGITUDE = "longitude";
     private static final String COLUMN_LOCATION_ALTITUDE = "altitude";
-    private static final String COLUMN_LOCATION_SPEED = "speed";    
-    //private static final String COLUMN_LOCATION_LOCATION_ID = "_id";
+    private static final String COLUMN_LOCATION_SPEED = "speed"; 
 	
 	public AreaFieldDatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -26,8 +25,10 @@ public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		
-		// create the "location" table
-	    db.execSQL("create table location (_id integer primary key autoincrement, latitude real, longitude real, altitude real, speed real");
+		ContentValues cv = new ContentValues();
+		
+		
+	    db.execSQL("create table location (" + "_id integer primary key autoincrement," + "latitude real," + "longitude real," + "altitude real," + "speed real" + ");");
 		
 	}
 
@@ -37,14 +38,13 @@ public class AreaFieldDatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	
-	 public long insertLocation( Location location) {
+	 public long insertLocation(Location location) {
 	        ContentValues cv = new ContentValues();
 	        cv.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
 	        cv.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
 	        cv.put(COLUMN_LOCATION_ALTITUDE, location.getAltitude());
-	        cv.put(COLUMN_LOCATION_SPEED, location.getSpeed()*3.6);	        
-	        //cv.put(COLUMN_LOCATION_LOCATION_ID, locId);
+	        cv.put(COLUMN_LOCATION_SPEED, location.getSpeed());
 	        return getWritableDatabase().insert(TABLE_LOCATION, null, cv);
-	    }
-
+	
+	 }
 }

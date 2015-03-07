@@ -6,6 +6,7 @@ import com.example.areafield.dbHelper.AreaFieldDatabaseHelper;
 
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,6 +30,7 @@ public class MainActivityFragment extends Fragment {
 	private AreaFieldDatabaseHelper mAreaFieldDatabaseHelper;
 	
 	
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,8 @@ public class MainActivityFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		
 		mAreaFieldDatabaseHelper = new AreaFieldDatabaseHelper(getActivity());
+		SQLiteDatabase db = mAreaFieldDatabaseHelper.getWritableDatabase();
+		
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -108,8 +112,10 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(Double.toString(location.getSpeed()*3.6));
+		run_speedTextView.setText(Double.toString((location.getSpeed()*3.6)));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		
+		mAreaFieldDatabaseHelper.insertLocation(location);
 			
 		
 	}
