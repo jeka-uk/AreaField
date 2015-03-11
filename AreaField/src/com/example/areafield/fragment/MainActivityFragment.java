@@ -1,8 +1,9 @@
 package com.example.areafield.fragment;
 
 
+import com.example.areafield.Adapter;
 import com.example.areafield.R;
-import com.example.areafield.dbHelper.AreaFieldDatabaseHelper;
+import com.example.areafield.dbHelper.DatabaseHelper;
 
 
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivityFragment extends Fragment {
+	
+	final String LOG_TAG = "myLogs";
 
 	private LocationManager mLocationManager;
 
@@ -27,7 +31,9 @@ public class MainActivityFragment extends Fragment {
 			run_speedTextView, run_altitudeTextView;
 	private Button run_startButton, run_stopButton;
 	
-	private AreaFieldDatabaseHelper mAreaFieldDatabaseHelper;
+	private DatabaseHelper mDatabaseHelper;
+	private SQLiteDatabase db;
+	private Adapter mAdapter = new Adapter();
 	
 	
 	
@@ -37,8 +43,10 @@ public class MainActivityFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		
-		mAreaFieldDatabaseHelper = new AreaFieldDatabaseHelper(getActivity());
-		SQLiteDatabase db = mAreaFieldDatabaseHelper.getWritableDatabase();
+		mDatabaseHelper = new DatabaseHelper(getActivity());
+		db = mDatabaseHelper.getWritableDatabase();
+		mDatabaseHelper.cleardata(db);
+		
 		
 
 		run_latitudeTextView = (TextView) view
@@ -51,6 +59,9 @@ public class MainActivityFragment extends Fragment {
 				.findViewById(R.id.run_altitudeTextView);
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
 		run_stopButton = (Button) view.findViewById(R.id.run_stopButton);
+		run_stopButton.setEnabled(false);
+		
+		
 
 		mLocationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
@@ -62,6 +73,9 @@ public class MainActivityFragment extends Fragment {
 
 				mLocationManager.requestLocationUpdates(
 						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				
+				run_stopButton.setEnabled(true);
+				run_startButton.setEnabled(false);
 
 			}
 		});
@@ -72,7 +86,15 @@ public class MainActivityFragment extends Fragment {
 			public void onClick(View v) {
 
 				mLocationManager.removeUpdates(locationListener);
-
+				run_startButton.setEnabled(true);
+				run_stopButton.setEnabled(false);
+				
+				mDatabaseHelper.reaLocation(db);
+				
+				Log.d(LOG_TAG,
+						"Main ID = " + String.valueOf(mAdapter.getMid()));
+				
+				
 			}
 		});
 
@@ -115,7 +137,7 @@ public class MainActivityFragment extends Fragment {
 		run_speedTextView.setText(Double.toString((location.getSpeed()*3.6)));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		
-		mAreaFieldDatabaseHelper.insertLocation(location);
+		mDatabaseHelper.insertLocation(location);
 			
 		
 	}
