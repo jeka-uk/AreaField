@@ -1,7 +1,8 @@
 package com.example.areafield.fragment;
 
 
-import com.example.areafield.Adapter;
+
+import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
@@ -30,24 +31,15 @@ public class MainActivityFragment extends Fragment {
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView;
 	private Button run_startButton, run_stopButton;
-	
-	private DatabaseHelper mDatabaseHelper;
-	private SQLiteDatabase db;
-	private Adapter mAdapter = new Adapter();
-	
-	
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		
-		mDatabaseHelper = new DatabaseHelper(getActivity());
-		db = mDatabaseHelper.getWritableDatabase();
-		mDatabaseHelper.cleardata(db);
-		
-		
+	   DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		dh.cleardata();
+		dh.close();
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -82,6 +74,8 @@ public class MainActivityFragment extends Fragment {
 
 		run_stopButton.setOnClickListener(new OnClickListener() {
 
+			private int latitudeIndex, longitudeIndex;
+
 			@Override
 			public void onClick(View v) {
 
@@ -89,11 +83,23 @@ public class MainActivityFragment extends Fragment {
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
 				
-				mDatabaseHelper.reaLocation(db);
+				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 				
 				Log.d(LOG_TAG,
-						"Main ID = " + String.valueOf(mAdapter.getMid()));
+						"LATITUDE = " + Double.toString(dh.getLocation(Constant.LATITUDE, Constant.COLUMN_LOCATION_LATITUDE)));
+				dh.close();
 				
+				Log.d(LOG_TAG,
+						"LATITUDE = " + Double.toString(dh.getLocation(Constant.LONGITUDE, Constant.COLUMN_LOCATION_LONGITUDE)));
+				dh.close();
+				Log.d(LOG_TAG,
+						"ALTITUDE = " + Double.toString(dh.getLocation(Constant.ALTITUDE, Constant.COLUMN_LOCATION_ALTITUDE)));
+				dh.close();
+				Log.d(LOG_TAG,
+						"SPEED = " + Double.toString(dh.getLocation(Constant.SPEED, Constant.COLUMN_LOCATION_SPEED)));
+				dh.close();
+				
+			
 				
 			}
 		});
@@ -131,13 +137,17 @@ public class MainActivityFragment extends Fragment {
 
 		if (location == null)
 			return;
+		
+	DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed()*3.6)));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		
-		mDatabaseHelper.insertLocation(location);
+	   dh.insertLocation(location);
+	   dh.close();
 			
 		
 	}
