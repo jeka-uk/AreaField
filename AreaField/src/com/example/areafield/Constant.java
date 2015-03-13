@@ -14,6 +14,7 @@ public class Constant {
 	public static final int LONGITUDE = 2;
 	public static final int ALTITUDE = 3;
 	public static final int SPEED = 4;
+	public static final int _ID = 5;
 	
 	
 

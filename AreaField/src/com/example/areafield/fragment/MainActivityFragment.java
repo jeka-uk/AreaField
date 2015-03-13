@@ -82,39 +82,36 @@ public class MainActivityFragment extends Fragment {
 				run_stopButton.setEnabled(false);
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-
+				
+				int endID;
+				
+				endID = dh.getEndId(Constant._ID);
+						
+										
+				for (int i = 1; i <= endID; i++){
+				
 				Log.d(LOG_TAG,
-						"LATITUDE = "
+						"latitude - "
 								+ Double.toString(dh.getLocation(
 										Constant.LATITUDE,
-										Constant.COLUMN_LOCATION_LATITUDE)));
-				dh.close();
+										Constant.COLUMN_LOCATION_LATITUDE, i)));
+				
 
 				Log.d(LOG_TAG,
-						"LATITUDE = "
+						"longitude - "
 								+ Double.toString(dh.getLocation(
 										Constant.LONGITUDE,
-										Constant.COLUMN_LOCATION_LONGITUDE)));
-				dh.close();
+										Constant.COLUMN_LOCATION_LONGITUDE, i)));
+			
 
-				Log.d(LOG_TAG,
-						"ALTITUDE = "
-								+ Double.toString(dh.getLocation(
-										Constant.ALTITUDE,
-										Constant.COLUMN_LOCATION_ALTITUDE)));
+				
+				
 				dh.close();
+				}
+				
+				textView1.setText(Double.toString(distance(50.487994, 30.227913, 46.652156, 32.864631, "K")));
 
-				Log.d(LOG_TAG,
-						"SPEED = "
-								+ Double.toString(dh.getLocation(
-										Constant.SPEED,
-										Constant.COLUMN_LOCATION_SPEED)));
-				dh.close();
-
-				/*
-				 * textView1.setText(Double.toString(distance(50.487994,
-				 * 30.227913, 46.652156, 32.864631, "K")));
-				 */
+		
 
 			}
 		});
@@ -190,10 +187,5 @@ public class MainActivityFragment extends Fragment {
 		return (dist);
 	}
 
-	private void lengthRoute(int endID ) {
-
-		for (int i = 0; i <= endID; i++);
-
-	}
-
+	
 }

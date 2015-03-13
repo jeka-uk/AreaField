@@ -2,6 +2,7 @@ package com.example.areafield.dbHelper;
 
 import com.example.areafield.Constant;
 
+import android.R.bool;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -81,22 +82,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public Double getLocation(int columIndex, String columName) {
+	public Double getLocation(int columIndex, String columName, int namberColum) {
 
 		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null,
-				null, null, null, null, null);
-
-		columIndex = cv.getColumnIndex(columName);
-
-		cv.moveToFirst();
+				null, null, null, null, null);		
 		
-		while (cv.isAfterLast() == false) {
-			
-			// действие пока не достигнет последней записи
-			cv.moveToNext();
-		}
+			cv.move(namberColum);
+			columIndex = cv.getColumnIndex(columName);
 		
+				
 		return cv.getDouble(columIndex);
+	}
+	
+	public int getEndId(int columIndex) {
+
+		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null,
+				null, null, null, null, null);		
+		
+			cv.moveToLast();
+			columIndex = cv.getColumnIndex(Constant.COLUMN_LOCATION_ID);
+		
+				
+		return cv.getInt(columIndex);
 	}
 
 }
