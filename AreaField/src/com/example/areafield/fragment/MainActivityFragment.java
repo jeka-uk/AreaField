@@ -109,11 +109,11 @@ public class MainActivityFragment extends Fragment {
 										Constant.COLUMN_LOCATION_SPEED)));*/
 				dh.close();  
 				
-				//textView1.setText(Double.toString(distance(50.487994, 30.227913, 46.652156, 32.864631, "K")));
+				textView1.setText(Double.toString(distance(50.487994, 30.227913, 46.652156, 32.864631, "K")));
 				
-				textView1.setText(Double.toString(dh.getLocation(
+				/*textView1.setText(Double.toString(dh.getLocation(
 						Constant.LATITUDE,
-						Constant.COLUMN_LOCATION_LATITUDE)));
+						Constant.COLUMN_LOCATION_LATITUDE)));*/
 
 			}
 		});
