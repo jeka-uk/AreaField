@@ -1,7 +1,5 @@
 package com.example.areafield.dbHelper;
 
-
-
 import com.example.areafield.Constant;
 
 import android.content.ContentValues;
@@ -15,8 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	
-	//final String LOG_TAG = "myLogs";
+
+	// final String LOG_TAG = "myLogs";
 
 	private static DatabaseHelper mInstance;
 	private static SQLiteDatabase myWritableDb;
@@ -24,13 +22,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "location.db";
 	private static final int VERSION = 1;
 
-	/*private static final String TABLE_NAME = "location";
-	private static final String COLUMN_LOCATION_LATITUDE = "latitude";
-	private static final String COLUMN_LOCATION_LONGITUDE = "longitude";
-	private static final String COLUMN_LOCATION_ALTITUDE = "altitude";
-	private static final String COLUMN_LOCATION_SPEED = "speed";*/
-	
-	
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
 	}
@@ -49,15 +40,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		return myWritableDb;
 	}
-	
-	 @Override
-	    public void close() {
-	        super.close();
-	        if (myWritableDb != null) {
-	            myWritableDb.close();
-	            myWritableDb = null;
-	        }
-	    }
+
+	@Override
+	public void close() {
+		super.close();
+		if (myWritableDb != null) {
+			myWritableDb.close();
+			myWritableDb = null;
+		}
+	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -90,25 +81,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public Double getLocation(int columIndex, String columName  ) {
+	public Double getLocation(int columIndex, String columName) {
 
-		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null, null, null, null, null, null);
+		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null,
+				null, null, null, null, null);
+
+		columIndex = cv.getColumnIndex(columName);
+
+		cv.moveToFirst();
 		
-		columIndex =  cv.getColumnIndex(columName);
-
-
-		if (cv.moveToFirst()) {	
-		
+		while (cv.isAfterLast() == false) {
 			
-
+			// действие пока не достигнет последней записи
+			cv.moveToNext();
 		}
-	    return cv.getDouble(columIndex);
+		
+		return cv.getDouble(columIndex);
 	}
-
-	
-	
-	
-	
-	
 
 }

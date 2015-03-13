@@ -50,7 +50,7 @@ public class MainActivityFragment extends Fragment {
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
 		run_stopButton = (Button) view.findViewById(R.id.run_stopButton);
 		run_stopButton.setEnabled(false);
-		
+
 		textView1 = (TextView) view.findViewById(R.id.textView1);
 
 		mLocationManager = (LocationManager) getActivity().getSystemService(
@@ -62,7 +62,7 @@ public class MainActivityFragment extends Fragment {
 			public void onClick(View v) {
 
 				mLocationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
@@ -83,7 +83,7 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				/*	Log.d(LOG_TAG,
+				Log.d(LOG_TAG,
 						"LATITUDE = "
 								+ Double.toString(dh.getLocation(
 										Constant.LATITUDE,
@@ -96,24 +96,25 @@ public class MainActivityFragment extends Fragment {
 										Constant.LONGITUDE,
 										Constant.COLUMN_LOCATION_LONGITUDE)));
 				dh.close();
+
 				Log.d(LOG_TAG,
 						"ALTITUDE = "
 								+ Double.toString(dh.getLocation(
 										Constant.ALTITUDE,
 										Constant.COLUMN_LOCATION_ALTITUDE)));
 				dh.close();
+
 				Log.d(LOG_TAG,
 						"SPEED = "
 								+ Double.toString(dh.getLocation(
 										Constant.SPEED,
-										Constant.COLUMN_LOCATION_SPEED)));*/
-				dh.close();  
-				
-				textView1.setText(Double.toString(distance(50.487994, 30.227913, 46.652156, 32.864631, "K")));
-				
-				/*textView1.setText(Double.toString(dh.getLocation(
-						Constant.LATITUDE,
-						Constant.COLUMN_LOCATION_LATITUDE)));*/
+										Constant.COLUMN_LOCATION_SPEED)));
+				dh.close();
+
+				/*
+				 * textView1.setText(Double.toString(distance(50.487994,
+				 * 30.227913, 46.652156, 32.864631, "K")));
+				 */
 
 			}
 		});
@@ -163,30 +164,36 @@ public class MainActivityFragment extends Fragment {
 		dh.close();
 
 	}
-	
+
 	private double deg2rad(double deg) {
-		  return (deg * Math.PI / 180.0);
-		}
-	
+		return (deg * Math.PI / 180.0);
+	}
+
 	private double rad2deg(double rad) {
-			  return (rad * 180 / Math.PI);
-			}
-	
-	
-	private double distance(double startLat1, double startLon1, double finishLat2, double finishLon2, String unit) {
-			  double theta = startLon1 - finishLon2;
-			  double dist = Math.sin(deg2rad(startLat1)) * Math.sin(deg2rad(finishLat2)) + Math.cos(deg2rad(startLat1)) * Math.cos(deg2rad(finishLat2)) * Math.cos(deg2rad(theta));
-			  dist = Math.acos(dist);
-			  dist = rad2deg(dist);
-			  dist = dist * 60 * 1.1515;
-			  if (unit == "K") {
-			    dist = dist * 1.609344;
-			  } else if (unit == "N") {
-			    dist = dist * 0.8684;
-			    }
-			  return (dist);
-			}
-	
-	
+		return (rad * 180 / Math.PI);
+	}
+
+	private double distance(double startLat1, double startLon1,
+			double finishLat2, double finishLon2, String unit) {
+		double theta = startLon1 - finishLon2;
+		double dist = Math.sin(deg2rad(startLat1))
+				* Math.sin(deg2rad(finishLat2)) + Math.cos(deg2rad(startLat1))
+				* Math.cos(deg2rad(finishLat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		if (unit == "K") {
+			dist = dist * 1.609344;
+		} else if (unit == "N") {
+			dist = dist * 0.8684;
+		}
+		return (dist);
+	}
+
+	private void lengthRoute(int endID ) {
+
+		for (int i = 0; i <= endID; i++);
+
+	}
 
 }
