@@ -82,36 +82,64 @@ public class MainActivityFragment extends Fragment {
 				run_stopButton.setEnabled(false);
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-				
+
 				int endID;
-				
+				double latitude, longitude,latitudeNext, longitudeNext, distanceRout, distanceStart;
+
 				endID = dh.getEndId(Constant._ID);
-						
-										
-				for (int i = 1; i <= endID; i++){
-				
-				Log.d(LOG_TAG,
-						"latitude - "
-								+ Double.toString(dh.getLocation(
-										Constant.LATITUDE,
-										Constant.COLUMN_LOCATION_LATITUDE, i)));
-				
 
-				Log.d(LOG_TAG,
-						"longitude - "
-								+ Double.toString(dh.getLocation(
-										Constant.LONGITUDE,
-										Constant.COLUMN_LOCATION_LONGITUDE, i)));
-			
+				for (int i = 1; i <= endID; i++) {
 
+					latitude = dh.getLocation(Constant.LATITUDE,
+							Constant.COLUMN_LOCATION_LATITUDE, i);
+					dh.close();
+
+					longitude = dh.getLocation(Constant.LONGITUDE,
+							Constant.COLUMN_LOCATION_LONGITUDE, i);
+					dh.close();
+					
+					latitudeNext = dh.getLocation(Constant.LATITUDE,
+							Constant.COLUMN_LOCATION_LATITUDE, i++);
+					dh.close();
+
+					longitudeNext = dh.getLocation(Constant.LONGITUDE,
+							Constant.COLUMN_LOCATION_LONGITUDE, i++);
+					dh.close();
+					
+					/*if(i == 1){
+						latitudeStart = latitude;
+						longitudeStart = longitude;
+					}
+					*/
+					//distanceStart = distance(latitudeStart, longitudeStart, longitude, longitude, "K"); 
+					
+					//distanceRout = distanceStart + ();
+							
+					Log.d(LOG_TAG, "endID - " + endID);
 				
-				
-				dh.close();
+					Log.d(LOG_TAG, "i - " + i);
+					
+					Log.d(LOG_TAG, "latitude - " + latitude);
+
+					Log.d(LOG_TAG, "longitude - " + longitude);
+					
+				//	Log.d(LOG_TAG, "latitudeStart - " + latitudeStart);
+
+					//Log.d(LOG_TAG, "latitudeStart - " + longitudeStart);
+					
+					//Log.d(LOG_TAG, "distance - " + Double.toString(distance(latitudeStart, longitudeStart, latitude, longitude, "K")));
+					
+					
+					
+					//textView1.setText(Double.toString(latitude));
+
+					
+					
+					
 				}
-				
-				textView1.setText(Double.toString(distance(50.487994, 30.227913, 46.652156, 32.864631, "K")));
 
-		
+				textView1.setText(Double.toString(distance(65.9667,
+				 -18.5333, 65.9667, -18.5333, "K")));
 
 			}
 		});
@@ -187,5 +215,4 @@ public class MainActivityFragment extends Fragment {
 		return (dist);
 	}
 
-	
 }
