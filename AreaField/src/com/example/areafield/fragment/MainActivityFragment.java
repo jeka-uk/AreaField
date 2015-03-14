@@ -1,5 +1,7 @@
 package com.example.areafield.fragment;
 
+import java.util.ArrayList;
+
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -62,7 +64,7 @@ public class MainActivityFragment extends Fragment {
 			public void onClick(View v) {
 
 				mLocationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+						LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
@@ -84,9 +86,12 @@ public class MainActivityFragment extends Fragment {
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
 				int endID;
-				double latitude, longitude,latitudeNext, longitudeNext, distanceRout, distanceStart;
+				double latitude, longitude,latitudeNext, longitudeNext, distanceRout = 0;
 
 				endID = dh.getEndId(Constant._ID);
+				
+				ArrayList<Double> arrLat= new ArrayList<Double>();
+			
 
 				for (int i = 1; i <= endID; i++) {
 
@@ -104,42 +109,12 @@ public class MainActivityFragment extends Fragment {
 
 					longitudeNext = dh.getLocation(Constant.LONGITUDE,
 							Constant.COLUMN_LOCATION_LONGITUDE, i++);
-					dh.close();
 					
-					/*if(i == 1){
-						latitudeStart = latitude;
-						longitudeStart = longitude;
-					}
-					*/
-					//distanceStart = distance(latitudeStart, longitudeStart, longitude, longitude, "K"); 
-					
-					//distanceRout = distanceStart + ();
-							
-					Log.d(LOG_TAG, "endID - " + endID);
-				
-					Log.d(LOG_TAG, "i - " + i);
-					
-					Log.d(LOG_TAG, "latitude - " + latitude);
-
-					Log.d(LOG_TAG, "longitude - " + longitude);
-					
-				//	Log.d(LOG_TAG, "latitudeStart - " + latitudeStart);
-
-					//Log.d(LOG_TAG, "latitudeStart - " + longitudeStart);
-					
-					//Log.d(LOG_TAG, "distance - " + Double.toString(distance(latitudeStart, longitudeStart, latitude, longitude, "K")));
-					
-					
-					
-					//textView1.setText(Double.toString(latitude));
-
-					
-					
+					arrLat.add(distance(latitude, longitude, latitudeNext, longitudeNext, "K"));
 					
 				}
-
-				textView1.setText(Double.toString(distance(65.9667,
-				 -18.5333, 65.9667, -18.5333, "K")));
+		
+				textView1.setText(String.valueOf(arrLat));
 
 			}
 		});
