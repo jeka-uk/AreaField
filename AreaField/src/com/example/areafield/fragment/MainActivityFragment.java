@@ -1,12 +1,14 @@
 package com.example.areafield.fragment;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
@@ -64,7 +66,7 @@ public class MainActivityFragment extends Fragment {
 			public void onClick(View v) {
 
 				mLocationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
@@ -85,36 +87,29 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				int endID;
-				double latitude, longitude,latitudeNext, longitudeNext, distanceRout = 0;
+				double latitude, longitude;
 
-				endID = dh.getEndId(Constant._ID);
-				
-				ArrayList<Double> arrLat= new ArrayList<Double>();
-			
+				ArrayList<Double> routing = new ArrayList<Double>();
 
-				for (int i = 1; i <= endID; i++) {
+				Cursor cv = dh.getMyWritableDatabase()
+						.query(Constant.TABLE_NAME, null, null, null, null,
+								null, null);
 
-					latitude = dh.getLocation(Constant.LATITUDE,
-							Constant.COLUMN_LOCATION_LATITUDE, i);
-					dh.close();
+				cv.moveToFirst();
 
-					longitude = dh.getLocation(Constant.LONGITUDE,
-							Constant.COLUMN_LOCATION_LONGITUDE, i);
-					dh.close();
-					
-					latitudeNext = dh.getLocation(Constant.LATITUDE,
-							Constant.COLUMN_LOCATION_LATITUDE, i++);
-					dh.close();
+				while (cv.isAfterLast() == false) {
 
-					longitudeNext = dh.getLocation(Constant.LONGITUDE,
-							Constant.COLUMN_LOCATION_LONGITUDE, i++);
-					
-					arrLat.add(distance(latitude, longitude, latitudeNext, longitudeNext, "K"));
-					
+					latitude = cv.getDouble(cv
+							.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE));
+					longitude = cv.getDouble(cv
+							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE));
+
+					routing.add(latitude);
+
+					cv.moveToNext();
 				}
-		
-				textView1.setText(String.valueOf(arrLat));
+
+				textView1.setText(String.valueOf(routing));
 
 			}
 		});
