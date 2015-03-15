@@ -87,9 +87,10 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				double latitude, longitude;
+				double latitude, longitude, routing = 0;
 
-				ArrayList<Double> routing = new ArrayList<Double>();
+				ArrayList<Double> routinglatitude = new ArrayList<Double>();
+				ArrayList<Double> routinglongitude = new ArrayList<Double>();
 
 				Cursor cv = dh.getMyWritableDatabase()
 						.query(Constant.TABLE_NAME, null, null, null, null,
@@ -104,12 +105,22 @@ public class MainActivityFragment extends Fragment {
 					longitude = cv.getDouble(cv
 							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE));
 
-					routing.add(latitude);
+					routinglatitude.add(latitude);
+					routinglongitude.add(longitude);
 
 					cv.moveToNext();
 				}
 
-				textView1.setText(String.valueOf(routing));
+				for (int index = 0; index < (routinglatitude.size()) - 1; index++) {
+
+					routing = (distance(routinglatitude.get(index),
+							routinglongitude.get(index),
+							routinglatitude.get(index + 1),
+							routinglongitude.get(index + 1), "K"))
+							+ routing;
+					textView1.setText(String.valueOf(routing*1000));
+
+				}
 
 			}
 		});
