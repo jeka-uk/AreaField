@@ -1,6 +1,7 @@
 package com.example.areafield.fragment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.example.areafield.Constant;
@@ -10,6 +11,8 @@ import com.example.areafield.dbHelper.DatabaseHelper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -57,21 +60,22 @@ public class MainActivityFragment extends Fragment {
 
 		textView1 = (TextView) view.findViewById(R.id.textView1);
 
-		mLocationManager = (LocationManager) getActivity().getSystemService(
-				Context.LOCATION_SERVICE);
-
+       mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);	
+		
 		run_startButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				mLocationManager.requestLocationUpdates(
+			mLocationManager.requestLocationUpdates(
 						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
-
-			}
+				
+				
+	
+					}
 		});
 
 		run_stopButton.setOnClickListener(new OnClickListener() {
@@ -116,10 +120,10 @@ public class MainActivityFragment extends Fragment {
 					routing = (distance(routinglatitude.get(index),
 							routinglongitude.get(index),
 							routinglatitude.get(index + 1),
-							routinglongitude.get(index + 1), "K"))
+							routinglongitude.get(index + 1)))
 							+ routing;
-					textView1.setText(String.valueOf(routing*1000));
-
+					textView1.setText(String.valueOf(routing));
+					
 				}
 
 			}
@@ -128,8 +132,12 @@ public class MainActivityFragment extends Fragment {
 		return view;
 
 	}
-
+	
+	
+	
 	private LocationListener locationListener = new LocationListener() {
+		
+		 
 
 		@Override
 		public void onLocationChanged(Location location) {
@@ -177,23 +185,21 @@ public class MainActivityFragment extends Fragment {
 
 	private double rad2deg(double rad) {
 		return (rad * 180 / Math.PI);
-	}
+	}                                                                                                                   
 
 	private double distance(double startLat1, double startLon1,
-			double finishLat2, double finishLon2, String unit) {
+			double finishLat2, double finishLon2) {
 		double theta = startLon1 - finishLon2;
 		double dist = Math.sin(deg2rad(startLat1))
 				* Math.sin(deg2rad(finishLat2)) + Math.cos(deg2rad(startLat1))
 				* Math.cos(deg2rad(finishLat2)) * Math.cos(deg2rad(theta));
 		dist = Math.acos(dist);
 		dist = rad2deg(dist);
-		dist = dist * 60 * 1.1515;
-		if (unit == "K") {
-			dist = dist * 1.609344;
-		} else if (unit == "N") {
-			dist = dist * 0.8684;
-		}
+		dist = dist * 60 * 1.1515;		
+		dist = (dist * 1.609344) * 1000; // metr
 		return (dist);
 	}
+
+	
 
 }
