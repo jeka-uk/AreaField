@@ -3,22 +3,43 @@ package com.example.areafield.fragment;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.Api.c;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.internal.mf;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Telephony.TextBasedSmsColumns;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +58,20 @@ public class MainActivityFragment extends Fragment {
 			run_speedTextView, run_altitudeTextView, textView1;
 	private Button run_startButton, run_stopButton;
 
+	private SupportMapFragment mapFragment;
+	private GoogleMap mGoogleMap;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+		mapFragment = (SupportMapFragment) (getActivity()
+				.getSupportFragmentManager()).findFragmentById(R.id.map);
+		mGoogleMap = mapFragment.getMap();
+		if (mGoogleMap == null) {
+			getActivity().finish();
+		}
 
 		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 		dh.cleardata();
@@ -60,27 +91,24 @@ public class MainActivityFragment extends Fragment {
 
 		textView1 = (TextView) view.findViewById(R.id.textView1);
 
-       mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);	
-		
+		mLocationManager = (LocationManager) getActivity().getSystemService(
+				Context.LOCATION_SERVICE);
+
 		run_startButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-			mLocationManager.requestLocationUpdates(
+				mLocationManager.requestLocationUpdates(
 						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
-				
-				
-	
-					}
+
+			}
 		});
 
 		run_stopButton.setOnClickListener(new OnClickListener() {
-
-			private int latitudeIndex, longitudeIndex;
 
 			@Override
 			public void onClick(View v) {
@@ -91,10 +119,9 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				double latitude, longitude, routing = 0;
+				double routing = 0;
 
-				ArrayList<Double> routinglatitude = new ArrayList<Double>();
-				ArrayList<Double> routinglongitude = new ArrayList<Double>();
+				ArrayList<LatLng> latitLngit = new ArrayList<LatLng>();
 
 				Cursor cv = dh.getMyWritableDatabase()
 						.query(Constant.TABLE_NAME, null, null, null, null,
@@ -104,26 +131,32 @@ public class MainActivityFragment extends Fragment {
 
 				while (cv.isAfterLast() == false) {
 
-					latitude = cv.getDouble(cv
-							.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE));
-					longitude = cv.getDouble(cv
-							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE));
+					LatLng latLng = new LatLng(
+							(cv.getDouble(cv
+									.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE))),
+							(cv.getDouble(cv
+									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));
 
-					routinglatitude.add(latitude);
-					routinglongitude.add(longitude);
+					latitLngit.add(latLng);
 
 					cv.moveToNext();
 				}
 
-				for (int index = 0; index < (routinglatitude.size()) - 1; index++) {
-
-					routing = (distance(routinglatitude.get(index),
-							routinglongitude.get(index),
-							routinglatitude.get(index + 1),
-							routinglongitude.get(index + 1)))
+				for (int index = 0; index < (latitLngit.size()) - 1; index++) {
+					routing = (distance((latitLngit.get(index).latitude),
+							(latitLngit.get(index).longitude),
+							(latitLngit.get(index + 1).latitude),
+							(latitLngit.get(index + 1).longitude)))
 							+ routing;
+
 					textView1.setText(String.valueOf(routing));
-					
+
+					addMarkerStartFinish(latitLngit.get(0));
+
+					addMarkerStartFinish(latitLngit.get((latitLngit.size()) - 1));
+
+					polyline(latitLngit.get(index), latitLngit.get(index + 1));
+
 				}
 
 			}
@@ -132,12 +165,8 @@ public class MainActivityFragment extends Fragment {
 		return view;
 
 	}
-	
-	
-	
+
 	private LocationListener locationListener = new LocationListener() {
-		
-		 
 
 		@Override
 		public void onLocationChanged(Location location) {
@@ -185,7 +214,7 @@ public class MainActivityFragment extends Fragment {
 
 	private double rad2deg(double rad) {
 		return (rad * 180 / Math.PI);
-	}                                                                                                                   
+	}
 
 	private double distance(double startLat1, double startLon1,
 			double finishLat2, double finishLon2) {
@@ -195,11 +224,27 @@ public class MainActivityFragment extends Fragment {
 				* Math.cos(deg2rad(finishLat2)) * Math.cos(deg2rad(theta));
 		dist = Math.acos(dist);
 		dist = rad2deg(dist);
-		dist = dist * 60 * 1.1515;		
+		dist = dist * 60 * 1.1515;
 		dist = (dist * 1.609344) * 1000; // metr
 		return (dist);
 	}
 
-	
+	public void addMarkerStartFinish(LatLng mLatLng) {
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(mLatLng);
+		markerOptions.icon(BitmapDescriptorFactory
+				.fromResource(R.drawable.st_marker));
+		mGoogleMap.addMarker(markerOptions);
+
+	}
+
+	public void polyline(LatLng mLatLngStart, LatLng mLatLngFinish) {
+
+		Polyline line = mGoogleMap
+				.addPolyline(new PolylineOptions()
+						.add(mLatLngStart, mLatLngFinish).width(7)
+						.color(Color.BLUE));
+
+	}
 
 }

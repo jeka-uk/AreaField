@@ -331,6 +331,7 @@ int drawable ic_plusone_standard_off_client 0x7f020074
 int drawable ic_plusone_tall_off_client 0x7f020075
 int drawable powered_by_google_dark 0x7f020076
 int drawable powered_by_google_light 0x7f020077
+int drawable st_marker 0x7f020078
 int id action_bar 0x7f080031
 int id action_bar_activity_content 0x7f08002a
 int id action_bar_container 0x7f080030
@@ -342,7 +343,7 @@ int id action_context_bar 0x7f080032
 int id action_menu_divider 0x7f08002b
 int id action_menu_presenter 0x7f08002c
 int id action_mode_close_button 0x7f080039
-int id action_settings 0x7f08005d
+int id action_settings 0x7f08005b
 int id activity_chooser_view_content 0x7f08003a
 int id adjust_height 0x7f080002
 int id adjust_width 0x7f080001
@@ -365,8 +366,6 @@ int id edit_query 0x7f080045
 int id end 0x7f080028
 int id expand_activities_button 0x7f08003b
 int id expanded_menu 0x7f080041
-int id fragment_1 0x7f080052
-int id fragment_2 0x7f080053
 int id grayscale 0x7f080015
 int id holo_dark 0x7f080007
 int id holo_light 0x7f080008
@@ -378,7 +377,7 @@ int id ifRoom 0x7f080020
 int id image 0x7f08003c
 int id listMode 0x7f080017
 int id list_item 0x7f08003e
-int id mapview 0x7f08005c
+int id map 0x7f08005a
 int id match_parent 0x7f08000e
 int id middle 0x7f080027
 int id monochrome 0x7f080016
@@ -389,13 +388,13 @@ int id production 0x7f080009
 int id progress_circular 0x7f08002d
 int id progress_horizontal 0x7f08002e
 int id radio 0x7f080044
-int id run_altitudeTextView 0x7f080057
-int id run_durationTextView 0x7f080058
-int id run_latitudeTextView 0x7f080055
-int id run_longitudeTextView 0x7f080056
-int id run_speedTextView 0x7f080054
-int id run_startButton 0x7f080059
-int id run_stopButton 0x7f08005a
+int id run_altitudeTextView 0x7f080055
+int id run_durationTextView 0x7f080056
+int id run_latitudeTextView 0x7f080053
+int id run_longitudeTextView 0x7f080054
+int id run_speedTextView 0x7f080052
+int id run_startButton 0x7f080057
+int id run_stopButton 0x7f080058
 int id sandbox 0x7f08000a
 int id satellite 0x7f080004
 int id search_badge 0x7f080047
@@ -418,7 +417,7 @@ int id strict_sandbox 0x7f08000b
 int id submit_area 0x7f08004e
 int id tabMode 0x7f080018
 int id terrain 0x7f080005
-int id textView1 0x7f08005b
+int id textView1 0x7f080059
 int id title 0x7f080040
 int id top_action_bar 0x7f080035
 int id up 0x7f080036
@@ -453,8 +452,7 @@ int layout abc_search_view 0x7f030016
 int layout abc_simple_decor 0x7f030017
 int layout activity_main 0x7f030018
 int layout fragment_main 0x7f030019
-int layout fragment_map 0x7f03001a
-int layout support_simple_spinner_dropdown_item 0x7f03001b
+int layout support_simple_spinner_dropdown_item 0x7f03001a
 int menu main 0x7f0d0000
 int raw gtm_analytics 0x7f050000
 int string abc_action_bar_home_description 0x7f070024

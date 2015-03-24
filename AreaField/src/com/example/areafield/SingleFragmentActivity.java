@@ -16,10 +16,10 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		FragmentManager fm = getSupportFragmentManager();
-		Fragment fragment = fm.findFragmentById(R.id.fragment_1);
+		Fragment fragment = fm.findFragmentById(R.id.container);
 		if (fragment == null) {
 			fragment = createFragment();
-			fm.beginTransaction().add(R.id.fragment_1, fragment).commit();
+			fm.beginTransaction().add(R.id.container, fragment).commit();
 		}
 				
 		

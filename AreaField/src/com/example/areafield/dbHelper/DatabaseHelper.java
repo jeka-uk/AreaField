@@ -1,6 +1,9 @@
 package com.example.areafield.dbHelper;
 
+import java.util.ArrayList;
+
 import com.example.areafield.Constant;
+import com.google.android.gms.maps.model.LatLng;
 
 import android.R.bool;
 import android.content.ContentValues;
@@ -22,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DB_NAME = "location.db";
 	private static final int VERSION = 1;
+	private static final LatLng LatLng = null;
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -93,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				
 		return cv.getDouble(columIndex);
 	}
+	
 	
 	public int getEndId(int columIndex) {
 
