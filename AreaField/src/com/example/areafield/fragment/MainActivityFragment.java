@@ -17,11 +17,14 @@ import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.internal.mf;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -104,6 +107,8 @@ public class MainActivityFragment extends Fragment {
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
+
+				starGoogleMap();
 
 			}
 		});
@@ -230,6 +235,7 @@ public class MainActivityFragment extends Fragment {
 	}
 
 	public void addMarkerStartFinish(LatLng mLatLng) {
+
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(mLatLng);
 		markerOptions.icon(BitmapDescriptorFactory
@@ -240,10 +246,16 @@ public class MainActivityFragment extends Fragment {
 
 	public void polyline(LatLng mLatLngStart, LatLng mLatLngFinish) {
 
-		Polyline line = mGoogleMap
-				.addPolyline(new PolylineOptions()
-						.add(mLatLngStart, mLatLngFinish).width(7)
-						.color(Color.BLUE));
+		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+				.add(mLatLngStart, mLatLngFinish).width(7).color(Color.BLUE));
+
+	}
+
+	public void starGoogleMap() {
+
+		UiSettings uiSettings = mGoogleMap.getUiSettings();
+		uiSettings.setZoomControlsEnabled(true);
+		mGoogleMap.setMyLocationEnabled(true);
 
 	}
 
