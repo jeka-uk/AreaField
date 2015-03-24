@@ -212,10 +212,14 @@ public class MainActivityFragment extends Fragment {
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		
 		movingCamera(location);
+		
+		if(location.getSpeed()>0){
+			
+			dh.insertLocation(location);
+			dh.close();
+		}
 
-		dh.insertLocation(location);
-		dh.close();
-
+		
 	}
 
 	private double deg2rad(double deg) {
@@ -252,7 +256,7 @@ public class MainActivityFragment extends Fragment {
 	public void polyline(LatLng mLatLngStart, LatLng mLatLngFinish) {
 
 		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-				.add(mLatLngStart, mLatLngFinish).width(7).color(Color.BLUE));
+				.add(mLatLngStart, mLatLngFinish).width(10).color(Color.LTGRAY));
 
 	}
 
