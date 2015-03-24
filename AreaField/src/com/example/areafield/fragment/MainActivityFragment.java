@@ -264,10 +264,8 @@ public class MainActivityFragment extends Fragment {
 		
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 	    .target(new LatLng(48.761043, 30.230563))
-	    .zoom(5)                   // Sets the zoom
-	    .bearing(90)                // Sets the orientation of the camera to east
-	    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
-	    .build();                   // Creates a CameraPosition from the builder
+	    .zoom(3).build();            
+	   
 		mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 		
 	}
