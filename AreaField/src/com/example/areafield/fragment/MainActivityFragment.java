@@ -23,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -75,6 +76,10 @@ public class MainActivityFragment extends Fragment {
 		if (mGoogleMap == null) {
 			getActivity().finish();
 		}
+		
+		starGoogleMap();
+		
+		
 
 		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 		dh.cleardata();
@@ -106,9 +111,7 @@ public class MainActivityFragment extends Fragment {
 						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
-				run_startButton.setEnabled(false);
-
-				starGoogleMap();
+				run_startButton.setEnabled(false);				
 
 			}
 		});
@@ -160,8 +163,8 @@ public class MainActivityFragment extends Fragment {
 
 					addMarkerStartFinish(latitLngit.get((latitLngit.size()) - 1));
 
-					polyline(latitLngit.get(index), latitLngit.get(index + 1));
-
+					polyline(latitLngit.get(index), latitLngit.get(index + 1));					
+					
 				}
 
 			}
@@ -207,6 +210,8 @@ public class MainActivityFragment extends Fragment {
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		
+		movingCamera(location);
 
 		dh.insertLocation(location);
 		dh.close();
@@ -256,7 +261,27 @@ public class MainActivityFragment extends Fragment {
 		UiSettings uiSettings = mGoogleMap.getUiSettings();
 		uiSettings.setZoomControlsEnabled(true);
 		mGoogleMap.setMyLocationEnabled(true);
-
+		
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+	    .target(new LatLng(48.761043, 30.230563))
+	    .zoom(5)                   // Sets the zoom
+	    .bearing(90)                // Sets the orientation of the camera to east
+	    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+	    .build();                   // Creates a CameraPosition from the builder
+		mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		
+	}
+	
+	public void movingCamera(Location location){
+		
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+	    .target(new LatLng(location.getLatitude(),location.getLongitude()))
+	    .zoom(17)                   // Sets the zoom
+	    .bearing(90)                // Sets the orientation of the camera to east
+	    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+	    .build();                   // Creates a CameraPosition from the builder
+		mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		
 	}
 
 }
