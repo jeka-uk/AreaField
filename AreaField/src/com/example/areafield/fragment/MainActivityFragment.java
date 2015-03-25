@@ -59,7 +59,7 @@ public class MainActivityFragment extends Fragment {
 	private LocationManager mLocationManager;
 
 	private TextView run_latitudeTextView, run_longitudeTextView,
-			run_speedTextView, run_altitudeTextView, textView1;
+			run_speedTextView, run_altitudeTextView, run_durationTextView, textView1;
 	private Button run_startButton, run_stopButton;
 
 	private SupportMapFragment mapFragment;
@@ -93,6 +93,7 @@ public class MainActivityFragment extends Fragment {
 				.findViewById(R.id.run_speedTextView);
 		run_altitudeTextView = (TextView) view
 				.findViewById(R.id.run_altitudeTextView);
+		run_durationTextView = (TextView) view.findViewById(R.id.run_durationTextView);
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
 		run_stopButton = (Button) view.findViewById(R.id.run_stopButton);
 		run_stopButton.setEnabled(false);
@@ -127,7 +128,7 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				double routing = 0;
+				double routing = 0.00;
 
 				ArrayList<LatLng> latitLngit = new ArrayList<LatLng>();
 
@@ -159,11 +160,23 @@ public class MainActivityFragment extends Fragment {
 
 					textView1.setText(String.valueOf(routing));
 
-					addMarkerStartFinish(latitLngit.get(0));
+					addMarkerStartFinish(latitLngit.get(0), "start");
 
-					addMarkerStartFinish(latitLngit.get((latitLngit.size()) - 1));
+					addMarkerStartFinish(latitLngit.get((latitLngit.size()) - 1), "finish");
 
-					polyline(latitLngit.get(index), latitLngit.get(index + 1));					
+					polyline(latitLngit.get(index), latitLngit.get(index + 1));	
+					
+					
+					Location mylocation = new Location("");
+					Location dest_location = new Location("");
+					dest_location.setLatitude(latitLngit.get(index).latitude);
+					dest_location.setLongitude(latitLngit.get(index).longitude);
+					Double my_loc = 0.00;
+					mylocation.setLatitude(latitLngit.get(0).latitude);
+					mylocation.setLongitude(latitLngit.get(0).longitude);
+					Double distanceNew = (double) mylocation.distanceTo(dest_location);// in meters
+					
+					run_durationTextView.setText(String.valueOf(distanceNew));
 					
 				}
 
@@ -212,6 +225,9 @@ public class MainActivityFragment extends Fragment {
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		
 		movingCamera(location);
+		/*dh.insertLocation(location);
+		dh.close();*/
+		
 		
 		if(location.getSpeed()>0){
 			
@@ -243,12 +259,19 @@ public class MainActivityFragment extends Fragment {
 		return (dist);
 	}
 
-	public void addMarkerStartFinish(LatLng mLatLng) {
+	public void addMarkerStartFinish(LatLng mLatLng, String choice) {
 
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(mLatLng);
-		markerOptions.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.st_marker));
+		if(choice == "start"){
+			markerOptions.icon(BitmapDescriptorFactory
+					.fromResource(R.drawable.st_marker));			
+		}else{
+			markerOptions.icon(BitmapDescriptorFactory
+					.fromResource(R.drawable.fi_marker));
+		}
+		
+		
 		mGoogleMap.addMarker(markerOptions);
 
 	}
@@ -256,7 +279,7 @@ public class MainActivityFragment extends Fragment {
 	public void polyline(LatLng mLatLngStart, LatLng mLatLngFinish) {
 
 		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-				.add(mLatLngStart, mLatLngFinish).width(10).color(Color.LTGRAY));
+				.add(mLatLngStart, mLatLngFinish).width(10).color(Color.RED));
 
 	}
 
@@ -278,11 +301,11 @@ public class MainActivityFragment extends Fragment {
 		
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 	    .target(new LatLng(location.getLatitude(),location.getLongitude()))
-	    .zoom(17)                   // Sets the zoom
+	    .zoom(15)                   // Sets the zoom
 	    .bearing(90)                // Sets the orientation of the camera to east
 	    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
 	    .build();                   // Creates a CameraPosition from the builder
-		mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 		
 	}
 
