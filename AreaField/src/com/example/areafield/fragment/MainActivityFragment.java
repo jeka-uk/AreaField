@@ -1,5 +1,7 @@
 package com.example.areafield.fragment;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -64,6 +66,7 @@ public class MainActivityFragment extends Fragment {
 
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
+	private double test = 0.00;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,9 +130,10 @@ public class MainActivityFragment extends Fragment {
 				run_stopButton.setEnabled(false);
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+				
 
-				double routing = 0.00;
-
+				ArrayList<Double> routing = new ArrayList<Double>();
+				
 				ArrayList<LatLng> latitLngit = new ArrayList<LatLng>();
 
 				Cursor cv = dh.getMyWritableDatabase()
@@ -152,31 +156,36 @@ public class MainActivityFragment extends Fragment {
 				}
 
 				for (int index = 0; index < (latitLngit.size()) - 1; index++) {
-					routing = (distance((latitLngit.get(index).latitude),
-							(latitLngit.get(index).longitude),
-							(latitLngit.get(index + 1).latitude),
-							(latitLngit.get(index + 1).longitude)))
-							+ routing;
-
-					textView1.setText(String.valueOf(routing));
-
+					
+					
 					addMarkerStartFinish(latitLngit.get(0), "start");
 
 					addMarkerStartFinish(latitLngit.get((latitLngit.size()) - 1), "finish");
 
 					polyline(latitLngit.get(index), latitLngit.get(index + 1));	
 					
-					
 					Location mylocation = new Location("");
 					Location dest_location = new Location("");
 					dest_location.setLatitude(latitLngit.get(index).latitude);
 					dest_location.setLongitude(latitLngit.get(index).longitude);
-					Double my_loc = 0.00;
-					mylocation.setLatitude(latitLngit.get(0).latitude);
-					mylocation.setLongitude(latitLngit.get(0).longitude);
-					Double distanceNew = (double) mylocation.distanceTo(dest_location);// in meters
+					double my_loc = 0.00;
+					mylocation.setLatitude(latitLngit.get(index + 1).latitude);
+					mylocation.setLongitude(latitLngit.get(index + 1).longitude);
+					double distanceNew = mylocation.distanceTo(dest_location);// in meters
 					
-					run_durationTextView.setText(String.valueOf(distanceNew));
+					routing.add(distanceNew);					
+
+					Log.i(LOG_TAG, "distanceNew - " + distanceNew);
+					 					
+				}
+				
+				for (int routIndex = 0; routIndex < routing.size(); routIndex++ ){
+					
+					test = routing.get(routIndex) + test;
+					
+					Log.i(LOG_TAG, "test - " + test);
+					
+					textView1.setText(String.valueOf(test));
 					
 				}
 
@@ -225,15 +234,15 @@ public class MainActivityFragment extends Fragment {
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		
 		movingCamera(location);
-		/*dh.insertLocation(location);
-		dh.close();*/
+		dh.insertLocation(location);
+		dh.close();
 		
 		
-		if(location.getSpeed()>0){
+		/*if(location.getSpeed()>0){
 			
 			dh.insertLocation(location);
 			dh.close();
-		}
+		}*/
 
 		
 	}
