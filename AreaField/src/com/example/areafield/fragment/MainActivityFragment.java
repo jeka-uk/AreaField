@@ -63,6 +63,8 @@ public class MainActivityFragment extends Fragment {
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
 	private double test = 0.00;
+	
+	Location locationStart = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,8 +140,7 @@ public class MainActivityFragment extends Fragment {
 					addMarkerStartFinish(
 							latitLngit.get((latitLngit.size()) - 1), "finish");
 
-					polyline(latitLngit.get(index), latitLngit.get(index + 1));
-
+					
 					Location mylocation = new Location("");
 					Location dest_location = new Location("");
 					dest_location.setLatitude(latitLngit.get(index).latitude);
@@ -199,6 +200,26 @@ public class MainActivityFragment extends Fragment {
 		movingCamera(location);
 
 		if (location.getSpeed() > 0 && location.getAccuracy() <= 6) {
+
+			
+			if (locationStart == null) {
+
+				locationStart = location;
+			}
+
+			Polyline lineWhait = mGoogleMap.addPolyline(new PolylineOptions()
+					.add(new LatLng(locationStart.getLatitude(), locationStart
+							.getLongitude()),
+							new LatLng(location.getLatitude(), location
+									.getLongitude())).width(10)
+					.color(Color.WHITE));
+			
+			Polyline lineBlu = mGoogleMap.addPolyline(new PolylineOptions()
+			.add(new LatLng(locationStart.getLatitude(), locationStart
+					.getLongitude()),
+					new LatLng(location.getLatitude(), location
+							.getLongitude())).width(7)
+			.color(Color.BLUE));
 
 			dh.insertLocation(location);
 			dh.close();
