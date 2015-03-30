@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -62,8 +63,9 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private double routingTwo, routing;
+	private double routing;
 	private double startLati, startlongi, startLatiDB, startlongiBD;
+	private BigDecimal routingTwo = BigDecimal.ZERO;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,24 +117,28 @@ public class MainActivityFragment extends Fragment {
 				mLocationManager.removeUpdates(locationListener);
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
+				
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-
+				
 				Cursor cv = dh.getMyWritableDatabase()
 						.query(Constant.TABLE_NAME, null, null, null, null,
 								null, null);
 				cv.moveToFirst();
 
 				while (cv.isAfterLast() == false) {
-					LatLng latLng = new LatLng(
+					
+										
+				 LatLng latLng = new LatLng(
 							(cv.getDouble(cv
 									.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE))),
 							(cv.getDouble(cv
-									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));
+									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));					
 
 					if (startLatiDB == 0 && startlongiBD == 0) {
 						startLatiDB = latLng.latitude;
 						startlongiBD = latLng.longitude;
+						
 					}
 
 					LatLng prev = new LatLng(startLatiDB, startlongiBD);
@@ -140,7 +146,7 @@ public class MainActivityFragment extends Fragment {
 
 					Polyline line = mGoogleMap
 							.addPolyline(new PolylineOptions().add(prev, my)
-									.width(8).color(Color.GREEN));
+									.width(10).color(Color.GREEN));
 
 					Location mylocation = new Location(" ");
 					Location dest_location = new Location(" ");
@@ -199,14 +205,19 @@ public class MainActivityFragment extends Fragment {
 		run_durationTextView.setText(Double.toString(location.getAccuracy()));
 
 		movingCamera(location);
+		
+		drawmap(location.getLatitude(), location.getLongitude());
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		dh.insertLocation(location);
+		dh.close();
+
+		/*if (location.getSpeed() > 0 && location.getAccuracy() <= 6) {
 
 			drawmap(location.getLatitude(), location.getLongitude());
 
 			dh.insertLocation(location);
 			dh.close();
-		}
+		}*/
 
 	}
 
@@ -222,12 +233,6 @@ public class MainActivityFragment extends Fragment {
 					.fromResource(R.drawable.fi_marker));
 		}
 		mGoogleMap.addMarker(markerOptions);
-	}
-
-	public void polyline(LatLng mLatLngStart, LatLng mLatLngFinish) {
-
-		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-				.add(mLatLngStart, mLatLngFinish).width(10).color(Color.RED));
 	}
 
 	public void starGoogleMap() {
@@ -261,7 +266,7 @@ public class MainActivityFragment extends Fragment {
 		LatLng my = new LatLng(latid, longid);
 
 		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-				.add(prev, my).width(12).color(Color.BLUE));
+				.add(prev, my).width(15).color(Color.BLUE));
 
 		Location mylocation = new Location(" ");
 		Location dest_location = new Location(" ");
@@ -274,7 +279,12 @@ public class MainActivityFragment extends Fragment {
 		startLati = latid;
 		startlongi = longid;
 
-		routingTwo = distanceNew + routingTwo;
+		//routingTwo = distanceNew + routingTwo;
+		
+		BigDecimal b1 = new BigDecimal(distanceNew);
+		
+		routingTwo = routingTwo.add(b1);
+		
 		textView1.setText(String.valueOf(routingTwo));
 
 	}
