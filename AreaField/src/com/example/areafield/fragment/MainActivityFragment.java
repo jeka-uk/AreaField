@@ -62,9 +62,8 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private double test = 0.00;
-	
-	Location locationStart = null;
+	private double test = 0.00, test2 = 0.00;
+	private double pLati = 0, plongi = 0, pLatidb = 0, plongidb = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,9 +115,9 @@ public class MainActivityFragment extends Fragment {
 				mLocationManager.removeUpdates(locationListener);
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
+
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-				ArrayList<Double> routing = new ArrayList<Double>();
-				ArrayList<LatLng> latitLngit = new ArrayList<LatLng>();
+
 				Cursor cv = dh.getMyWritableDatabase()
 						.query(Constant.TABLE_NAME, null, null, null, null,
 								null, null);
@@ -129,35 +128,37 @@ public class MainActivityFragment extends Fragment {
 									.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE))),
 							(cv.getDouble(cv
 									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));
-					latitLngit.add(latLng);
+
+					if (pLatidb == 0 && plongidb == 0) {
+						pLatidb = latLng.latitude;
+						plongidb = latLng.longitude;
+					}
+
+					LatLng prev = new LatLng(pLatidb, plongidb);
+					LatLng my = new LatLng(latLng.latitude, latLng.longitude);
+
+					Polyline line = mGoogleMap
+							.addPolyline(new PolylineOptions().add(prev, my)
+									.width(8).color(Color.GREEN));
+
+					Location mylocation = new Location("");
+					Location dest_location = new Location("");
+					dest_location.setLatitude(prev.latitude);
+					dest_location.setLongitude(prev.longitude);
+					double my_loc = 0.00;
+					mylocation.setLatitude(my.latitude);
+					mylocation.setLongitude(my.longitude);
+					double distanceNew = mylocation.distanceTo(dest_location);
+
+					pLatidb = latLng.latitude;
+					plongidb = latLng.longitude;
+
+					test = distanceNew + test;
+					textView1.setText(String.valueOf(test));
+
 					cv.moveToNext();
 				}
 
-				for (int index = 0; index < (latitLngit.size()) - 1; index++) {
-
-					addMarkerStartFinish(latitLngit.get(0), "start");
-
-					addMarkerStartFinish(
-							latitLngit.get((latitLngit.size()) - 1), "finish");
-
-					
-					Location mylocation = new Location("");
-					Location dest_location = new Location("");
-					dest_location.setLatitude(latitLngit.get(index).latitude);
-					dest_location.setLongitude(latitLngit.get(index).longitude);
-					double my_loc = 0.00;
-					mylocation.setLatitude(latitLngit.get(index + 1).latitude);
-					mylocation.setLongitude(latitLngit.get(index + 1).longitude);
-					double distanceNew = mylocation.distanceTo(dest_location);// in
-																				// meters
-					routing.add(distanceNew);
-					Log.i(LOG_TAG, "distanceNew - " + distanceNew);
-				}
-				for (int routIndex = 0; routIndex < routing.size(); routIndex++) {
-					test = routing.get(routIndex) + test;
-					Log.i(LOG_TAG, "test - " + test);
-					textView1.setText(String.valueOf(test));
-				}
 			}
 		});
 		return view;
@@ -201,25 +202,7 @@ public class MainActivityFragment extends Fragment {
 
 		if (location.getSpeed() > 0 && location.getAccuracy() <= 6) {
 
-			
-			if (locationStart == null) {
-
-				locationStart = location;
-			}
-
-			Polyline lineWhait = mGoogleMap.addPolyline(new PolylineOptions()
-					.add(new LatLng(locationStart.getLatitude(), locationStart
-							.getLongitude()),
-							new LatLng(location.getLatitude(), location
-									.getLongitude())).width(10)
-					.color(Color.WHITE));
-			
-			Polyline lineBlu = mGoogleMap.addPolyline(new PolylineOptions()
-			.add(new LatLng(locationStart.getLatitude(), locationStart
-					.getLongitude()),
-					new LatLng(location.getLatitude(), location
-							.getLongitude())).width(7)
-			.color(Color.BLUE));
+			drawmap(location.getLatitude(), location.getLongitude());
 
 			dh.insertLocation(location);
 			dh.close();
@@ -268,6 +251,36 @@ public class MainActivityFragment extends Fragment {
 				.build(); // Creates a CameraPosition from the builder
 		mGoogleMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(cameraPosition));
+	}
+
+	public void drawmap(double latid, double longid) {
+
+		if (pLati == 0 && plongi == 0) {
+			pLati = latid;
+			plongi = longid;
+		}
+
+		LatLng prev = new LatLng(pLati, plongi);
+		LatLng my = new LatLng(latid, longid);
+
+		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+				.add(prev, my).width(12).color(Color.BLUE));
+
+		Location mylocation = new Location("");
+		Location dest_location = new Location("");
+		dest_location.setLatitude(prev.latitude);
+		dest_location.setLongitude(prev.longitude);
+		double my_loc = 0.00;
+		mylocation.setLatitude(my.latitude);
+		mylocation.setLongitude(my.longitude);
+		double distanceNew = mylocation.distanceTo(dest_location);
+
+		pLati = latid;
+		plongi = longid;
+
+		test2 = distanceNew + test2;
+		textView1.setText(String.valueOf(test2));
+
 	}
 
 }
