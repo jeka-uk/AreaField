@@ -62,8 +62,8 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private double test = 0.00, test2 = 0.00;
-	private double pLati = 0, plongi = 0, pLatidb = 0, plongidb = 0;
+	private double routing = 0.00, routingTwo = 0.00;
+	private double startLati = 0, startlongi = 0, startLatiDB = 0, startlongiBD = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,12 +129,12 @@ public class MainActivityFragment extends Fragment {
 							(cv.getDouble(cv
 									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));
 
-					if (pLatidb == 0 && plongidb == 0) {
-						pLatidb = latLng.latitude;
-						plongidb = latLng.longitude;
+					if (startLatiDB == 0 && startlongiBD == 0) {
+						startLatiDB = latLng.latitude;
+						startlongiBD = latLng.longitude;
 					}
 
-					LatLng prev = new LatLng(pLatidb, plongidb);
+					LatLng prev = new LatLng(startLatiDB, startlongiBD);
 					LatLng my = new LatLng(latLng.latitude, latLng.longitude);
 
 					Polyline line = mGoogleMap
@@ -150,11 +150,11 @@ public class MainActivityFragment extends Fragment {
 					mylocation.setLongitude(my.longitude);
 					double distanceNew = mylocation.distanceTo(dest_location);
 
-					pLatidb = latLng.latitude;
-					plongidb = latLng.longitude;
+					startLatiDB = latLng.latitude;
+					startlongiBD = latLng.longitude;
 
-					test = distanceNew + test;
-					textView1.setText(String.valueOf(test));
+					routing = distanceNew + routing;
+					textView1.setText(String.valueOf(routing));
 
 					cv.moveToNext();
 				}
@@ -255,12 +255,12 @@ public class MainActivityFragment extends Fragment {
 
 	public void drawmap(double latid, double longid) {
 
-		if (pLati == 0 && plongi == 0) {
-			pLati = latid;
-			plongi = longid;
+		if (startLati == 0 && startlongi == 0) {
+			startLati = latid;
+			startlongi = longid;
 		}
 
-		LatLng prev = new LatLng(pLati, plongi);
+		LatLng prev = new LatLng(startLati, startlongi);
 		LatLng my = new LatLng(latid, longid);
 
 		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
@@ -275,11 +275,11 @@ public class MainActivityFragment extends Fragment {
 		mylocation.setLongitude(my.longitude);
 		double distanceNew = mylocation.distanceTo(dest_location);
 
-		pLati = latid;
-		plongi = longid;
+		startLati = latid;
+		startlongi = longid;
 
-		test2 = distanceNew + test2;
-		textView1.setText(String.valueOf(test2));
+		routingTwo = distanceNew + routingTwo;
+		textView1.setText(String.valueOf(routingTwo));
 
 	}
 
