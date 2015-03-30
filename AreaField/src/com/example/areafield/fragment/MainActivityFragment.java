@@ -62,8 +62,8 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private double routing = 0.00, routingTwo = 0.00;
-	private double startLati = 0, startlongi = 0, startLatiDB = 0, startlongiBD = 0;
+	private double routingTwo, routing;
+	private double startLati, startlongi, startLatiDB, startlongiBD;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,6 +122,7 @@ public class MainActivityFragment extends Fragment {
 						.query(Constant.TABLE_NAME, null, null, null, null,
 								null, null);
 				cv.moveToFirst();
+
 				while (cv.isAfterLast() == false) {
 					LatLng latLng = new LatLng(
 							(cv.getDouble(cv
@@ -141,11 +142,10 @@ public class MainActivityFragment extends Fragment {
 							.addPolyline(new PolylineOptions().add(prev, my)
 									.width(8).color(Color.GREEN));
 
-					Location mylocation = new Location("");
-					Location dest_location = new Location("");
+					Location mylocation = new Location(" ");
+					Location dest_location = new Location(" ");
 					dest_location.setLatitude(prev.latitude);
 					dest_location.setLongitude(prev.longitude);
-					double my_loc = 0.00;
 					mylocation.setLatitude(my.latitude);
 					mylocation.setLongitude(my.longitude);
 					double distanceNew = mylocation.distanceTo(dest_location);
@@ -154,7 +154,7 @@ public class MainActivityFragment extends Fragment {
 					startlongiBD = latLng.longitude;
 
 					routing = distanceNew + routing;
-					textView1.setText(String.valueOf(routing));
+					run_altitudeTextView.setText(String.valueOf(routing));
 
 					cv.moveToNext();
 				}
@@ -195,12 +195,12 @@ public class MainActivityFragment extends Fragment {
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
-		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		run_durationTextView.setText(Double.toString(location.getAccuracy()));
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 6) {
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			drawmap(location.getLatitude(), location.getLongitude());
 
@@ -245,10 +245,7 @@ public class MainActivityFragment extends Fragment {
 
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 				.target(new LatLng(location.getLatitude(), location
-						.getLongitude())).zoom(13) // Sets the zoom
-				.bearing(90) // Sets the orientation of the camera to east
-				.tilt(30) // Sets the tilt of the camera to 30 degrees
-				.build(); // Creates a CameraPosition from the builder
+						.getLongitude())).zoom(13).bearing(90).tilt(30).build();
 		mGoogleMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(cameraPosition));
 	}
@@ -266,11 +263,10 @@ public class MainActivityFragment extends Fragment {
 		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
 				.add(prev, my).width(12).color(Color.BLUE));
 
-		Location mylocation = new Location("");
-		Location dest_location = new Location("");
+		Location mylocation = new Location(" ");
+		Location dest_location = new Location(" ");
 		dest_location.setLatitude(prev.latitude);
 		dest_location.setLongitude(prev.longitude);
-		double my_loc = 0.00;
 		mylocation.setLatitude(my.latitude);
 		mylocation.setLongitude(my.longitude);
 		double distanceNew = mylocation.distanceTo(dest_location);
