@@ -1,51 +1,28 @@
 package com.example.areafield.fragment;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 
+import android.R.color;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Telephony.TextBasedSmsColumns;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,9 +40,9 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private double routing;
-	private double startLati, startlongi, startLatiDB, startlongiBD;
-	private BigDecimal routingTwo = BigDecimal.ZERO;
+
+	private Location previousLocation, previousLocationBD;
+	private long distanceTraveled = 0, distanceTraveledBD = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,56 +94,33 @@ public class MainActivityFragment extends Fragment {
 				mLocationManager.removeUpdates(locationListener);
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
-				
+
+				previousLocation = null;
+				distanceTraveled = 0;
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-				
+
 				Cursor cv = dh.getMyWritableDatabase()
 						.query(Constant.TABLE_NAME, null, null, null, null,
 								null, null);
 				cv.moveToFirst();
 
 				while (cv.isAfterLast() == false) {
-					
-										
-				 LatLng latLng = new LatLng(
-							(cv.getDouble(cv
-									.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE))),
-							(cv.getDouble(cv
-									.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE))));					
 
-					if (startLatiDB == 0 && startlongiBD == 0) {
-						startLatiDB = latLng.latitude;
-						startlongiBD = latLng.longitude;
-						
-					}
+					Location locationDB = new Location("location from db");
+					locationDB.setLatitude(cv.getDouble(cv
+							.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE)));
+					locationDB.setLongitude(cv.getDouble(cv
+							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE)));
 
-					LatLng prev = new LatLng(startLatiDB, startlongiBD);
-					LatLng my = new LatLng(latLng.latitude, latLng.longitude);
-
-					Polyline line = mGoogleMap
-							.addPolyline(new PolylineOptions().add(prev, my)
-									.width(10).color(Color.GREEN));
-
-					Location mylocation = new Location(" ");
-					Location dest_location = new Location(" ");
-					dest_location.setLatitude(prev.latitude);
-					dest_location.setLongitude(prev.longitude);
-					mylocation.setLatitude(my.latitude);
-					mylocation.setLongitude(my.longitude);
-					double distanceNew = mylocation.distanceTo(dest_location);
-
-					startLatiDB = latLng.latitude;
-					startlongiBD = latLng.longitude;
-
-					routing = distanceNew + routing;
-					run_altitudeTextView.setText(String.valueOf(routing));
+					drawCalculateRouting(locationDB, run_altitudeTextView);
 
 					cv.moveToNext();
 				}
 
 			}
 		});
+
 		return view;
 	}
 
@@ -205,19 +159,18 @@ public class MainActivityFragment extends Fragment {
 		run_durationTextView.setText(Double.toString(location.getAccuracy()));
 
 		movingCamera(location);
-		
-		drawmap(location.getLatitude(), location.getLongitude());
 
+		/*drawCalculateRouting(location, textView1);
 		dh.insertLocation(location);
-		dh.close();
+		dh.close();*/
 
-		/*if (location.getSpeed() > 0 && location.getAccuracy() <= 6) {
+		
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
-			drawmap(location.getLatitude(), location.getLongitude());
-
+			drawCalculateRouting(location, textView1);
 			dh.insertLocation(location);
 			dh.close();
-		}*/
+		}
 
 	}
 
@@ -250,43 +203,31 @@ public class MainActivityFragment extends Fragment {
 
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 				.target(new LatLng(location.getLatitude(), location
-						.getLongitude())).zoom(13).bearing(90).tilt(30).build();
+						.getLongitude())).zoom(13).bearing(90).build();
 		mGoogleMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(cameraPosition));
 	}
 
-	public void drawmap(double latid, double longid) {
+	public void drawCalculateRouting(Location location, TextView textView) {
 
-		if (startLati == 0 && startlongi == 0) {
-			startLati = latid;
-			startlongi = longid;
+		// Log.d(LOG_TAG, "Location "+location);
+
+		if (previousLocation != null) {
+
+			distanceTraveled += location.distanceTo(previousLocation);
+
+			PolygonOptions polygoneOptions = new PolygonOptions()
+					.add((new LatLng(previousLocation.getLatitude(),
+							previousLocation.getLongitude())),
+							(new LatLng(location.getLatitude(), location
+									.getLongitude()))).strokeColor(Color.RED)
+					.strokeWidth(10);
+			mGoogleMap.addPolygon(polygoneOptions);
 		}
 
-		LatLng prev = new LatLng(startLati, startlongi);
-		LatLng my = new LatLng(latid, longid);
+		previousLocation = location;
 
-		Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-				.add(prev, my).width(15).color(Color.BLUE));
-
-		Location mylocation = new Location(" ");
-		Location dest_location = new Location(" ");
-		dest_location.setLatitude(prev.latitude);
-		dest_location.setLongitude(prev.longitude);
-		mylocation.setLatitude(my.latitude);
-		mylocation.setLongitude(my.longitude);
-		double distanceNew = mylocation.distanceTo(dest_location);
-
-		startLati = latid;
-		startlongi = longid;
-
-		//routingTwo = distanceNew + routingTwo;
-		
-		BigDecimal b1 = new BigDecimal(distanceNew);
-		
-		routingTwo = routingTwo.add(b1);
-		
-		textView1.setText(String.valueOf(routingTwo));
+		textView.setText(String.valueOf(distanceTraveled + " m"));
 
 	}
-
 }
