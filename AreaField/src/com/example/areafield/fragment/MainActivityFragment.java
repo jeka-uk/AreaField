@@ -1,5 +1,7 @@
 package com.example.areafield.fragment;
 
+import java.util.Timer;
+
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -10,6 +12,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -22,6 +25,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +34,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivityFragment extends Fragment {
 	final String LOG_TAG = "myLogs";
@@ -41,13 +46,16 @@ public class MainActivityFragment extends Fragment {
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
 
-	private Location previousLocation, previousLocationBD;
+	private Location previousLocation = null, previousLocationBD = null;
 	private long distanceTraveled = 0, distanceTraveledBD = 0;
+
+	private PowerManager.WakeLock wakeLock;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
+
 		mapFragment = (SupportMapFragment) (getActivity()
 				.getSupportFragmentManager()).findFragmentById(R.id.map);
 		mGoogleMap = mapFragment.getMap();
@@ -84,6 +92,17 @@ public class MainActivityFragment extends Fragment {
 								1000, 0, locationListener);
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
+
+				PowerManager pm = (PowerManager) getActivity()
+						.getSystemService(Context.POWER_SERVICE);
+				wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+						"My wakelook");
+				wakeLock.acquire();
+				Toast acquire = Toast.makeText(getActivity()
+						.getApplicationContext(), "Wake Lock ON",
+						Toast.LENGTH_SHORT);
+				acquire.show();
+
 			}
 		});
 		run_stopButton.setOnClickListener(new OnClickListener() {
@@ -97,6 +116,12 @@ public class MainActivityFragment extends Fragment {
 
 				previousLocation = null;
 				distanceTraveled = 0;
+
+				wakeLock.release();
+				Toast release = Toast.makeText(getActivity()
+						.getApplicationContext(), "Wake Lock OFF",
+						Toast.LENGTH_SHORT);
+				release.show();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
@@ -119,6 +144,7 @@ public class MainActivityFragment extends Fragment {
 				}
 
 			}
+
 		});
 
 		return view;
@@ -160,11 +186,11 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		/*drawCalculateRouting(location, textView1);
-		dh.insertLocation(location);
-		dh.close();*/
+		/*
+		 * drawCalculateRouting(location, textView1);
+		 * dh.insertLocation(location); dh.close();
+		 */
 
-		
 		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			drawCalculateRouting(location, textView1);
@@ -230,4 +256,5 @@ public class MainActivityFragment extends Fragment {
 		textView.setText(String.valueOf(distanceTraveled + " m"));
 
 	}
+
 }
