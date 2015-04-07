@@ -238,7 +238,7 @@ public class MainActivityFragment extends Fragment {
 				.newCameraPosition(cameraPosition));
 	}
 
-	public void drawCalculateRouting(Location location, TextView textView) {
+	/*public void drawCalculateRouting(Location location, TextView textView) {
 
 		 Log.d(LOG_TAG, "Location "+location);
 
@@ -259,8 +259,46 @@ public class MainActivityFragment extends Fragment {
 
 		textView.setText(String.valueOf(distanceTraveled + " m"));
 
+	}*/
+	
+	public void drawCalculateRouting(Location location, TextView textView) {
+
+		Log.d(LOG_TAG, "Location " + location);
+
+		double lat1 = location.getLatitude();
+		double lon1 = location.getLongitude();
+		double lat2 = previousLocation.getLatitude();
+		double lon2 = previousLocation.getLongitude();
+		double R = 6371; // km
+		double dLat = (lat2 - lat1) * Math.PI / 180;
+		double dLon = (lon2 - lon1) * Math.PI / 180;
+		lat1 = lat1 * Math.PI / 180;
+		lat2 = lat2 * Math.PI / 180;
+
+		if (previousLocation != null) {
+
+			double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+					+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1)
+					* Math.cos(lat2);
+			double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			double d = R * c * 1000;
+
+			distanceTraveled += d;
+
+			PolygonOptions polygoneOptions = new PolygonOptions()
+					.add((new LatLng(previousLocation.getLatitude(),
+							previousLocation.getLongitude())),
+							(new LatLng(location.getLatitude(), location
+									.getLongitude()))).strokeColor(Color.RED)
+					.strokeWidth(10);
+			mGoogleMap.addPolygon(polygoneOptions);
+
+		}
+
+		previousLocation = location;
+
+		textView.setText(String.valueOf(distanceTraveled + " m"));
+
 	}
-	
-	
 
 }
