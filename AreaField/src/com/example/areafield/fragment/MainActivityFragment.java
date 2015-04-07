@@ -1,7 +1,5 @@
 package com.example.areafield.fragment;
 
-import java.util.Timer;
-
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -12,18 +10,15 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import android.R.color;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
@@ -37,7 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivityFragment extends Fragment {
-	final String LOG_TAG = "myLogs";
+
+	private final String LOG_TAG = "myLogs";
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView, run_durationTextView,
@@ -46,8 +42,8 @@ public class MainActivityFragment extends Fragment {
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
 
-	private Location previousLocation = null, previousLocationBD = null;
-	private long distanceTraveled = 0, distanceTraveledBD = 0;
+	private Location previousLocation = null;
+	private long distanceTraveled = 0;
 
 	private PowerManager.WakeLock wakeLock;
 
@@ -59,13 +55,18 @@ public class MainActivityFragment extends Fragment {
 		mapFragment = (SupportMapFragment) (getActivity()
 				.getSupportFragmentManager()).findFragmentById(R.id.map);
 		mGoogleMap = mapFragment.getMap();
+
 		if (mGoogleMap == null) {
+
 			getActivity().finish();
 		}
+
 		starGoogleMap();
+
 		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 		dh.cleardata();
 		dh.close();
+
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
 		run_longitudeTextView = (TextView) view
@@ -85,19 +86,21 @@ public class MainActivityFragment extends Fragment {
 				Context.LOCATION_SERVICE);
 
 		run_startButton.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				mLocationManager
-						.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-								1000, 0, locationListener);
+				mLocationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
 
 				PowerManager pm = (PowerManager) getActivity()
 						.getSystemService(Context.POWER_SERVICE);
+
 				wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 						"My wakelook");
 				wakeLock.acquire();
+
 				Toast acquire = Toast.makeText(getActivity()
 						.getApplicationContext(), "Wake Lock ON",
 						Toast.LENGTH_SHORT);
@@ -118,10 +121,6 @@ public class MainActivityFragment extends Fragment {
 				distanceTraveled = 0;
 
 				wakeLock.release();
-				Toast release = Toast.makeText(getActivity()
-						.getApplicationContext(), "Wake Lock OFF",
-						Toast.LENGTH_SHORT);
-				release.show();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
@@ -186,14 +185,16 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		/*
-		 * drawCalculateRouting(location, textView1);
-		 * dh.insertLocation(location); dh.close();
-		 */
-
 		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
-			drawCalculateRouting(location, textView1);
+			if (previousLocation != null) {
+
+				drawCalculateRouting(location, textView1);
+
+			}
+
+			previousLocation = location;
+
 			dh.insertLocation(location);
 			dh.close();
 		}
@@ -204,13 +205,16 @@ public class MainActivityFragment extends Fragment {
 
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(mLatLng);
+
 		if (choice == "start") {
+
 			markerOptions.icon(BitmapDescriptorFactory
 					.fromResource(R.drawable.st_marker));
 		} else {
 			markerOptions.icon(BitmapDescriptorFactory
 					.fromResource(R.drawable.fi_marker));
 		}
+
 		mGoogleMap.addMarker(markerOptions);
 	}
 
@@ -236,7 +240,7 @@ public class MainActivityFragment extends Fragment {
 
 	public void drawCalculateRouting(Location location, TextView textView) {
 
-		// Log.d(LOG_TAG, "Location "+location);
+		 Log.d(LOG_TAG, "Location "+location);
 
 		if (previousLocation != null) {
 
@@ -256,5 +260,7 @@ public class MainActivityFragment extends Fragment {
 		textView.setText(String.valueOf(distanceTraveled + " m"));
 
 	}
+	
+	
 
 }
