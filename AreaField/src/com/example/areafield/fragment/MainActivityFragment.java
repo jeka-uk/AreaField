@@ -137,7 +137,7 @@ public class MainActivityFragment extends Fragment {
 					locationDB.setLongitude(cv.getDouble(cv
 							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE)));
 
-					drawCalculateRouting(locationDB, run_altitudeTextView);
+					drawCalculateRouting(locationDB, run_altitudeTextView, null);
 
 					cv.moveToNext();
 				}
@@ -189,7 +189,7 @@ public class MainActivityFragment extends Fragment {
 
 			if (previousLocation != null) {
 
-				drawCalculateRouting(location, textView1);
+				drawCalculateRouting(location, textView1, "draw");
 
 			}
 
@@ -238,30 +238,30 @@ public class MainActivityFragment extends Fragment {
 				.newCameraPosition(cameraPosition));
 	}
 
-	/*public void drawCalculateRouting(Location location, TextView textView) {
+	/*
+	 * public void drawCalculateRouting(Location location, TextView textView) {
+	 * 
+	 * Log.d(LOG_TAG, "Location "+location);
+	 * 
+	 * if (previousLocation != null) {
+	 * 
+	 * distanceTraveled += location.distanceTo(previousLocation);
+	 * 
+	 * PolygonOptions polygoneOptions = new PolygonOptions() .add((new
+	 * LatLng(previousLocation.getLatitude(), previousLocation.getLongitude())),
+	 * (new LatLng(location.getLatitude(), location
+	 * .getLongitude()))).strokeColor(Color.RED) .strokeWidth(10);
+	 * mGoogleMap.addPolygon(polygoneOptions); }
+	 * 
+	 * previousLocation = location;
+	 * 
+	 * textView.setText(String.valueOf(distanceTraveled + " m"));
+	 * 
+	 * }
+	 */
 
-		 Log.d(LOG_TAG, "Location "+location);
-
-		if (previousLocation != null) {
-
-			distanceTraveled += location.distanceTo(previousLocation);
-
-			PolygonOptions polygoneOptions = new PolygonOptions()
-					.add((new LatLng(previousLocation.getLatitude(),
-							previousLocation.getLongitude())),
-							(new LatLng(location.getLatitude(), location
-									.getLongitude()))).strokeColor(Color.RED)
-					.strokeWidth(10);
-			mGoogleMap.addPolygon(polygoneOptions);
-		}
-
-		previousLocation = location;
-
-		textView.setText(String.valueOf(distanceTraveled + " m"));
-
-	}*/
-	
-	public void drawCalculateRouting(Location location, TextView textView) {
+	public void drawCalculateRouting(Location location, TextView textView,
+			String choice) {
 
 		Log.d(LOG_TAG, "Location " + location);
 
@@ -285,13 +285,19 @@ public class MainActivityFragment extends Fragment {
 
 			distanceTraveled += d;
 
-			PolygonOptions polygoneOptions = new PolygonOptions()
-					.add((new LatLng(previousLocation.getLatitude(),
-							previousLocation.getLongitude())),
-							(new LatLng(location.getLatitude(), location
-									.getLongitude()))).strokeColor(Color.RED)
-					.strokeWidth(10);
-			mGoogleMap.addPolygon(polygoneOptions);
+			if (choice == "draw") {
+
+				PolygonOptions polygoneOptions = new PolygonOptions()
+						.add((new LatLng(previousLocation.getLatitude(),
+								previousLocation.getLongitude())),
+								(new LatLng(location.getLatitude(), location
+										.getLongitude())))
+						.strokeColor(Color.RED).strokeWidth(10);
+				mGoogleMap.addPolygon(polygoneOptions);
+
+			} else {
+
+			}
 
 		}
 
