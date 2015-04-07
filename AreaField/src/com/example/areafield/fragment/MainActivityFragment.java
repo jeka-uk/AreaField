@@ -265,17 +265,17 @@ public class MainActivityFragment extends Fragment {
 
 		Log.d(LOG_TAG, "Location " + location);
 
-		double lat1 = location.getLatitude();
-		double lon1 = location.getLongitude();
-		double lat2 = previousLocation.getLatitude();
-		double lon2 = previousLocation.getLongitude();
-		double R = 6371; // km
-		double dLat = (lat2 - lat1) * Math.PI / 180;
-		double dLon = (lon2 - lon1) * Math.PI / 180;
-		lat1 = lat1 * Math.PI / 180;
-		lat2 = lat2 * Math.PI / 180;
-
 		if (previousLocation != null) {
+
+			double lat1 = location.getLatitude();
+			double lon1 = location.getLongitude();
+			double lat2 = previousLocation.getLatitude();
+			double lon2 = previousLocation.getLongitude();
+			double R = 6371; // km
+			double dLat = (lat2 - lat1) * Math.PI / 180;
+			double dLon = (lon2 - lon1) * Math.PI / 180;
+			lat1 = lat1 * Math.PI / 180;
+			lat2 = lat2 * Math.PI / 180;
 
 			double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
 					+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1)
