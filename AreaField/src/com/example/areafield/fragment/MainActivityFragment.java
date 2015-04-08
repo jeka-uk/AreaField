@@ -238,28 +238,6 @@ public class MainActivityFragment extends Fragment {
 				.newCameraPosition(cameraPosition));
 	}
 
-	/*
-	 * public void drawCalculateRouting(Location location, TextView textView) {
-	 * 
-	 * Log.d(LOG_TAG, "Location "+location);
-	 * 
-	 * if (previousLocation != null) {
-	 * 
-	 * distanceTraveled += location.distanceTo(previousLocation);
-	 * 
-	 * PolygonOptions polygoneOptions = new PolygonOptions() .add((new
-	 * LatLng(previousLocation.getLatitude(), previousLocation.getLongitude())),
-	 * (new LatLng(location.getLatitude(), location
-	 * .getLongitude()))).strokeColor(Color.RED) .strokeWidth(10);
-	 * mGoogleMap.addPolygon(polygoneOptions); }
-	 * 
-	 * previousLocation = location;
-	 * 
-	 * textView.setText(String.valueOf(distanceTraveled + " m"));
-	 * 
-	 * }
-	 */
-
 	public void drawCalculateRouting(Location location, TextView textView,
 			String choice) {
 

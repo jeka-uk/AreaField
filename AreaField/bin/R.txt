@@ -345,7 +345,7 @@ int id action_context_bar 0x7f0c0033
 int id action_menu_divider 0x7f0c0002
 int id action_menu_presenter 0x7f0c0003
 int id action_mode_close_button 0x7f0c003a
-int id action_settings 0x7f0c005c
+int id action_settings 0x7f0c005d
 int id activity_chooser_view_content 0x7f0c003b
 int id adjust_height 0x7f0c0006
 int id adjust_width 0x7f0c0007
@@ -419,6 +419,7 @@ int id split_action_bar 0x7f0c0034
 int id strict_sandbox 0x7f0c0011
 int id submit_area 0x7f0c004f
 int id tabMode 0x7f0c001f
+int id tableLayout 0x7f0c005c
 int id terrain 0x7f0c000c
 int id textView1 0x7f0c005a
 int id title 0x7f0c0041

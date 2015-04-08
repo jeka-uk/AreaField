@@ -1,96 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    >
+    android:layout_height="wrap_content" >
+
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/speed"
-            />
-        <TextView android:id="@+id/run_speedTextView"
+            android:text="@string/speed" />
+
+        <TextView
+            android:id="@+id/run_speedTextView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/latitude"
-            />
-        <TextView android:id="@+id/run_latitudeTextView"
+            android:text="@string/latitude" />
+
+        <TextView
+            android:id="@+id/run_latitudeTextView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/longitude"
-            />
-        <TextView android:id="@+id/run_longitudeTextView"
+            android:text="@string/longitude" />
+
+        <TextView
+            android:id="@+id/run_longitudeTextView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/altitude"
-            />
-        <TextView android:id="@+id/run_altitudeTextView"
+            android:text="@string/altitude" />
+
+        <TextView
+            android:id="@+id/run_altitudeTextView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/elapsed_time"
-            />
-        <TextView android:id="@+id/run_durationTextView"
+            android:text="@string/elapsed_time" />
+
+        <TextView
+            android:id="@+id/run_durationTextView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
     </TableRow>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        >
-        <Button android:id="@+id/run_startButton"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/run_startButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/start"
-            />
-        <Button android:id="@+id/run_stopButton"
+            android:text="@string/start" />
+
+        <Button
+            android:id="@+id/run_stopButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/stop"
-            />
-        <!-- <Button android:id="@+id/run_mapButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/map"
-            /> -->
+            android:text="@string/stop" />
+      
     </LinearLayout>
 
     <TextView
@@ -98,15 +104,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView" />
-    
-     <fragment
+
+    <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </fragment>
-    
-        
-       
-</TableLayout>
 
+</TableLayout>
