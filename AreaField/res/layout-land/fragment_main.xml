@@ -29,7 +29,8 @@
             <TextView
                 android:id="@+id/run_speedTextView"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow>
@@ -60,7 +61,8 @@
             <TextView
                 android:id="@+id/run_longitudeTextView"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow>
@@ -75,7 +77,8 @@
             <TextView
                 android:id="@+id/run_altitudeTextView"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+                android:layout_weight="1"/>
         </TableRow>
 
         <TableRow>
@@ -91,7 +94,24 @@
                 android:id="@+id/run_durationTextView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp" />
+                android:textSize="25sp" 
+                android:layout_weight="1"/>
+        </TableRow>
+        
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="5sp"
+                android:text="@string/routing" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:layout_weight="1"/>
         </TableRow>
 
         <LinearLayout
@@ -113,12 +133,12 @@
                 android:text="@string/stop" />
         </LinearLayout>
 
-        <TextView
+        <!-- <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Routind" />
+            android:text="Routind" /> -->
     </TableLayout>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@
     <string name="longitude">Longitude:</string>
     <string name="altitude">Altitude:</string>
     <string name="elapsed_time">Elapsed Time:</string>
+    <string name="routing">Routing:</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="gps_enabled">GPS Enabled</string>

@@ -137,7 +137,7 @@ public class MainActivityFragment extends Fragment {
 					locationDB.setLongitude(cv.getDouble(cv
 							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE)));
 
-					drawCalculateRouting(locationDB, run_altitudeTextView, null);
+					//drawCalculateRouting(locationDB, null, null);
 
 					cv.moveToNext();
 				}
@@ -180,7 +180,7 @@ public class MainActivityFragment extends Fragment {
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
-		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 		run_durationTextView.setText(Double.toString(location.getAccuracy()));
 
 		movingCamera(location);

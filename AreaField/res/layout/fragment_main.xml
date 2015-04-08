@@ -70,10 +70,10 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="5sp"
-            android:text="@string/elapsed_time" />
+            android:text="@string/routing" />
 
         <TextView
-            android:id="@+id/run_durationTextView"
+            android:id="@+id/textView1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="25sp" />
@@ -96,14 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/stop" />
-      
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
     <fragment
         android:id="@+id/map"

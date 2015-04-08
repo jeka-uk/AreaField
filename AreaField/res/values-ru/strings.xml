@@ -10,6 +10,7 @@
     <string name="longitude">Долгота:</string>
     <string name="altitude">Высота:</string>
     <string name="elapsed_time">Время работы:</string>
+    <string name="routing">Маршрут:</string>
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
     <string name="gps_enabled">GPS Enabled</string>
