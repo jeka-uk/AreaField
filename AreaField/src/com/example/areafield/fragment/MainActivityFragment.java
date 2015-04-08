@@ -37,7 +37,7 @@ public class MainActivityFragment extends Fragment {
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView, run_durationTextView,
-			textView1;
+			routingTextView;
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
@@ -80,7 +80,7 @@ public class MainActivityFragment extends Fragment {
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
 		run_stopButton = (Button) view.findViewById(R.id.run_stopButton);
 		run_stopButton.setEnabled(false);
-		textView1 = (TextView) view.findViewById(R.id.textView1);
+		routingTextView = (TextView) view.findViewById(R.id.routingTextView);
 
 		mLocationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
@@ -137,7 +137,7 @@ public class MainActivityFragment extends Fragment {
 					locationDB.setLongitude(cv.getDouble(cv
 							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE)));
 
-					//drawCalculateRouting(locationDB, null, null);
+					// drawCalculateRouting(locationDB, null, null);
 
 					cv.moveToNext();
 				}
@@ -189,7 +189,7 @@ public class MainActivityFragment extends Fragment {
 
 			if (previousLocation != null) {
 
-				drawCalculateRouting(location, textView1, "draw");
+				drawCalculateRouting(location, routingTextView, "draw");
 
 			}
 

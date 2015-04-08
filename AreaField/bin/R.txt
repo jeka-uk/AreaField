@@ -390,6 +390,7 @@ int id production 0x7f0c000f
 int id progress_circular 0x7f0c0004
 int id progress_horizontal 0x7f0c0005
 int id radio 0x7f0c0045
+int id routingTextView 0x7f0c0057
 int id run_altitudeTextView 0x7f0c0056
 int id run_durationTextView 0x7f0c005c
 int id run_latitudeTextView 0x7f0c0054
@@ -421,7 +422,6 @@ int id submit_area 0x7f0c004f
 int id tabMode 0x7f0c001f
 int id tableLayout 0x7f0c005b
 int id terrain 0x7f0c000c
-int id textView1 0x7f0c0057
 int id title 0x7f0c0041
 int id top_action_bar 0x7f0c0036
 int id up 0x7f0c0037

@@ -1588,6 +1588,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f0c0004;
         public static final int progress_horizontal=0x7f0c0005;
         public static final int radio=0x7f0c0045;
+        public static final int routingTextView=0x7f0c0057;
         public static final int run_altitudeTextView=0x7f0c0056;
         public static final int run_durationTextView=0x7f0c005c;
         public static final int run_latitudeTextView=0x7f0c0054;
@@ -1619,7 +1620,6 @@ containing a value of this type.
         public static final int tabMode=0x7f0c001f;
         public static final int tableLayout=0x7f0c005b;
         public static final int terrain=0x7f0c000c;
-        public static final int textView1=0x7f0c0057;
         public static final int title=0x7f0c0041;
         public static final int top_action_bar=0x7f0c0036;
         public static final int up=0x7f0c0037;
