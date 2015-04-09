@@ -1577,7 +1577,7 @@ containing a value of this type.
         public static final int image=0x7f0c003d;
         public static final int listMode=0x7f0c001e;
         public static final int list_item=0x7f0c003f;
-        public static final int map=0x7f0c005a;
+        public static final int map=0x7f0c005b;
         public static final int match_parent=0x7f0c0014;
         public static final int middle=0x7f0c002f;
         public static final int monochrome=0x7f0c001c;
@@ -1588,14 +1588,14 @@ containing a value of this type.
         public static final int progress_circular=0x7f0c0004;
         public static final int progress_horizontal=0x7f0c0005;
         public static final int radio=0x7f0c0045;
-        public static final int routingTextView=0x7f0c0057;
+        public static final int routingTextView=0x7f0c0058;
         public static final int run_altitudeTextView=0x7f0c0056;
-        public static final int run_durationTextView=0x7f0c005c;
+        public static final int run_durationTextView=0x7f0c0057;
         public static final int run_latitudeTextView=0x7f0c0054;
         public static final int run_longitudeTextView=0x7f0c0055;
         public static final int run_speedTextView=0x7f0c0053;
-        public static final int run_startButton=0x7f0c0058;
-        public static final int run_stopButton=0x7f0c0059;
+        public static final int run_startButton=0x7f0c0059;
+        public static final int run_stopButton=0x7f0c005a;
         public static final int sandbox=0x7f0c0010;
         public static final int satellite=0x7f0c000b;
         public static final int search_badge=0x7f0c0048;
@@ -1618,7 +1618,7 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f0c0011;
         public static final int submit_area=0x7f0c004f;
         public static final int tabMode=0x7f0c001f;
-        public static final int tableLayout=0x7f0c005b;
+        public static final int tableLayout=0x7f0c005c;
         public static final int terrain=0x7f0c000c;
         public static final int title=0x7f0c0041;
         public static final int top_action_bar=0x7f0c0036;

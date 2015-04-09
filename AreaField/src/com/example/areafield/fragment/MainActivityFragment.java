@@ -1,5 +1,11 @@
 package com.example.areafield.fragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -20,7 +26,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +37,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivityFragment extends Fragment {
 
@@ -46,6 +53,13 @@ public class MainActivityFragment extends Fragment {
 	private long distanceTraveled = 0;
 
 	private PowerManager.WakeLock wakeLock;
+
+	private long startTime = 0L;
+
+	private Handler customHandler = new Handler();
+	 long timeInMilliseconds = 0L;
+	 long timeSwapBuff = 0L;
+	 long updatedTime = 0L;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,11 +115,16 @@ public class MainActivityFragment extends Fragment {
 						"My wakelook");
 				wakeLock.acquire();
 
-				Toast acquire = Toast.makeText(getActivity()
-						.getApplicationContext(), "Wake Lock ON",
-						Toast.LENGTH_SHORT);
-				acquire.show();
-
+				// Toast acquire = Toast.makeText(getActivity()
+				// .getApplicationContext(), "Wake Lock ON",
+				// Toast.LENGTH_SHORT);
+				// acquire.show();
+				
+				//start timer
+				startTime = SystemClock.uptimeMillis();
+				customHandler.postDelayed(updateTimerThread, 0);
+				
+				
 			}
 		});
 		run_stopButton.setOnClickListener(new OnClickListener() {
@@ -119,6 +138,10 @@ public class MainActivityFragment extends Fragment {
 
 				previousLocation = null;
 				distanceTraveled = 0;
+				
+				// paus timer				
+				timeSwapBuff += timeInMilliseconds;
+				customHandler.removeCallbacks(updateTimerThread);
 
 				wakeLock.release();
 
@@ -181,7 +204,6 @@ public class MainActivityFragment extends Fragment {
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
 		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
-		run_durationTextView.setText(Double.toString(location.getAccuracy()));
 
 		movingCamera(location);
 
@@ -284,5 +306,31 @@ public class MainActivityFragment extends Fragment {
 		textView.setText(String.valueOf(distanceTraveled + " m"));
 
 	}
+
+	private Runnable updateTimerThread = new Runnable() {
+
+		public void run() {
+
+			timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+			updatedTime = timeSwapBuff + timeInMilliseconds;
+
+			int secs = (int) (updatedTime / 1000);
+
+			int mins = secs / 60;
+			
+			int hours = secs /3600;
+
+			secs = secs % 60;
+
+			int milliseconds = (int) (updatedTime % 1000);
+
+			run_durationTextView.setText("" + hours + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
+
+			customHandler.postDelayed(this, 0);
+
+		}
+
+	};
 
 }
