@@ -1,10 +1,6 @@
 package com.example.areafield.fragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 import com.example.areafield.Constant;
 import com.example.areafield.R;
@@ -41,6 +37,7 @@ import android.widget.TextView;
 public class MainActivityFragment extends Fragment {
 
 	private final String LOG_TAG = "myLogs";
+	
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView, run_durationTextView,
@@ -48,18 +45,13 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-
 	private Location previousLocation = null;
-	private long distanceTraveled = 0;
 
 	private PowerManager.WakeLock wakeLock;
 
-	private long startTime = 0L;
-
 	private Handler customHandler = new Handler();
-	 long timeInMilliseconds = 0L;
-	 long timeSwapBuff = 0L;
-	 long updatedTime = 0L;
+	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
+			startTime = 0L, distanceTraveled = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,12 +111,11 @@ public class MainActivityFragment extends Fragment {
 				// .getApplicationContext(), "Wake Lock ON",
 				// Toast.LENGTH_SHORT);
 				// acquire.show();
-				
-				//start timer
+
+				// start timer
 				startTime = SystemClock.uptimeMillis();
 				customHandler.postDelayed(updateTimerThread, 0);
-				
-				
+
 			}
 		});
 		run_stopButton.setOnClickListener(new OnClickListener() {
@@ -138,8 +129,8 @@ public class MainActivityFragment extends Fragment {
 
 				previousLocation = null;
 				distanceTraveled = 0;
-				
-				// paus timer				
+
+				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
 
@@ -312,20 +303,18 @@ public class MainActivityFragment extends Fragment {
 		public void run() {
 
 			timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
 			updatedTime = timeSwapBuff + timeInMilliseconds;
 
 			int secs = (int) (updatedTime / 1000);
-
 			int mins = secs / 60;
-			
-			int hours = secs /3600;
-
+			int hours = secs / 3600;
 			secs = secs % 60;
 
-			int milliseconds = (int) (updatedTime % 1000);
+			//int milliseconds = (int) (updatedTime % 1000);
 
-			run_durationTextView.setText("" + hours + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
+			run_durationTextView.setText("" + hours + ":"
+					+ String.format("%02d", mins) + ":"
+					+ String.format("%02d", secs));
 
 			customHandler.postDelayed(this, 0);
 
