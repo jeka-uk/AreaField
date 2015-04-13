@@ -1,7 +1,5 @@
 package com.example.areafield.fragment;
 
-
-
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -15,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import android.R.bool;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -24,6 +23,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,11 +33,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivityFragment extends Fragment {
 
 	private final String LOG_TAG = "myLogs";
-	
+
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
 			run_speedTextView, run_altitudeTextView, run_durationTextView,
@@ -46,17 +47,22 @@ public class MainActivityFragment extends Fragment {
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
 	private Location previousLocation = null;
-
-	private PowerManager.WakeLock wakeLock;
+	private WakeLock wakeLock;
 
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
 			startTime = 0L, distanceTraveled = 0;
 
+	private String locationProvider = LocationManager.GPS_PROVIDER;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+		PowerManager pm = (PowerManager) getActivity().getSystemService(
+				Context.POWER_SERVICE);
+		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
 
 		mapFragment = (SupportMapFragment) (getActivity()
 				.getSupportFragmentManager()).findFragmentById(R.id.map);
@@ -95,22 +101,14 @@ public class MainActivityFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				mLocationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+				mLocationManager.requestLocationUpdates(locationProvider, 0, 0,
+						locationListener);
+
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
 
-				PowerManager pm = (PowerManager) getActivity()
-						.getSystemService(Context.POWER_SERVICE);
-
-				wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-						"My wakelook");
 				wakeLock.acquire();
-
-				// Toast acquire = Toast.makeText(getActivity()
-				// .getApplicationContext(), "Wake Lock ON",
-				// Toast.LENGTH_SHORT);
-				// acquire.show();
 
 				// start timer
 				startTime = SystemClock.uptimeMillis();
@@ -130,11 +128,11 @@ public class MainActivityFragment extends Fragment {
 				previousLocation = null;
 				distanceTraveled = 0;
 
+				wakeLock.release();
+
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
-
-				wakeLock.release();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
@@ -310,7 +308,7 @@ public class MainActivityFragment extends Fragment {
 			int hours = secs / 3600;
 			secs = secs % 60;
 
-			//int milliseconds = (int) (updatedTime % 1000);
+			// int milliseconds = (int) (updatedTime % 1000);
 
 			run_durationTextView.setText("" + hours + ":"
 					+ String.format("%02d", mins) + ":"
