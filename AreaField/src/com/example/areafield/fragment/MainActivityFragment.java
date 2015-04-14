@@ -46,14 +46,12 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private Location previousLocation = null;
+	private Location previousLocation = null, myLocation = null;
 	private WakeLock wakeLock;
 
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
 			startTime = 0L, distanceTraveled = 0;
-
-	private String locationProvider = LocationManager.GPS_PROVIDER;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,8 +100,8 @@ public class MainActivityFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 
-				mLocationManager.requestLocationUpdates(locationProvider, 0, 0,
-						locationListener);
+				mLocationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 1, 0, locationListener);
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
@@ -166,7 +164,9 @@ public class MainActivityFragment extends Fragment {
 		@Override
 		public void onLocationChanged(Location location) {
 
-			showLocation(location);
+			myLocation = location;
+
+			showLocation(myLocation);
 
 		}
 
@@ -256,7 +256,7 @@ public class MainActivityFragment extends Fragment {
 
 		if (previousLocation != null) {
 
-			double lat1 = location.getLatitude();
+			/*double lat1 = location.getLatitude();
 			double lon1 = location.getLongitude();
 			double lat2 = previousLocation.getLatitude();
 			double lon2 = previousLocation.getLongitude();
@@ -272,7 +272,9 @@ public class MainActivityFragment extends Fragment {
 			double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 			double d = R * c * 1000;
 
-			distanceTraveled += d;
+			distanceTraveled += d;*/
+			
+			distanceTraveled += location.distanceTo(previousLocation);
 
 			if (choice == "draw") {
 
