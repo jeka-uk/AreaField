@@ -48,10 +48,12 @@ public class MainActivityFragment extends Fragment {
 	private GoogleMap mGoogleMap;
 	private Location previousLocation = null, myLocation = null;
 	private WakeLock wakeLock;
+	private boolean gpsFix;
 
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
-			startTime = 0L, distanceTraveled = 0;
+			startTime = 0L;
+	private float distanceTraveled = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,12 +107,9 @@ public class MainActivityFragment extends Fragment {
 
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
+				gpsFix = true;
 
 				wakeLock.acquire();
-
-				// start timer
-				startTime = SystemClock.uptimeMillis();
-				customHandler.postDelayed(updateTimerThread, 0);
 
 			}
 		});
@@ -125,12 +124,17 @@ public class MainActivityFragment extends Fragment {
 
 				previousLocation = null;
 				distanceTraveled = 0;
-
-				wakeLock.release();
-
+				
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
+				
+				timeInMilliseconds = 0L;
+				timeSwapBuff = 0L;
+				updatedTime = 0L;
+				startTime = 0L;
+
+				wakeLock.release();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
@@ -164,9 +168,7 @@ public class MainActivityFragment extends Fragment {
 		@Override
 		public void onLocationChanged(Location location) {
 
-			myLocation = location;
-
-			showLocation(myLocation);
+			showLocation(location);
 
 		}
 
@@ -189,6 +191,7 @@ public class MainActivityFragment extends Fragment {
 			return;
 
 		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
@@ -198,16 +201,31 @@ public class MainActivityFragment extends Fragment {
 
 		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
-			if (previousLocation != null) {
+			if (gpsFix == true) {
 
-				drawCalculateRouting(location, routingTextView, "draw");
+				// start timer
+				startTime = SystemClock.uptimeMillis();
+				customHandler.postDelayed(updateTimerThread, 0);
 
+				gpsFix = false;
 			}
 
-			previousLocation = location;
+			drawCalculateRouting(location, routingTextView, "draw");
 
 			dh.insertLocation(location);
 			dh.close();
+
+		} else {
+
+			if (gpsFix == false) {
+
+				// pause timer
+				timeSwapBuff += timeInMilliseconds;
+				customHandler.removeCallbacks(updateTimerThread);
+				
+				gpsFix = true;
+			}
+
 		}
 
 	}
@@ -256,7 +274,7 @@ public class MainActivityFragment extends Fragment {
 
 		if (previousLocation != null) {
 
-			/*double lat1 = location.getLatitude();
+			double lat1 = location.getLatitude();
 			double lon1 = location.getLongitude();
 			double lat2 = previousLocation.getLatitude();
 			double lon2 = previousLocation.getLongitude();
@@ -272,9 +290,7 @@ public class MainActivityFragment extends Fragment {
 			double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 			double d = R * c * 1000;
 
-			distanceTraveled += d;*/
-			
-			distanceTraveled += location.distanceTo(previousLocation);
+			distanceTraveled += d;
 
 			if (choice == "draw") {
 
