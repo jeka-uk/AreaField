@@ -51,15 +51,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-		db.execSQL("create table run ("
-				+ "_id integer primary key autoincrement,"
-				+ "start_date integer" + ");");
-
 		db.execSQL("create table location ("
 				+ "_id integer primary key autoincrement," + "latitude real,"
 				+ "longitude real," + "altitude real," + "speed real,"
-				+ "provider varchar(100),"
-				+ "run_id integer references run(_id)" + ");");
+				+ "provider varchar(100)," + "timestamp integer,"
+				+ "series_mov integer" + ");");
 
 	}
 
@@ -68,14 +64,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public long insertLocation(Location location) {
+	public long insertLocation(Location location, long series_mov) {
 		ContentValues cv = new ContentValues();
 		cv.put(Constant.COLUMN_LOCATION_LATITUDE, location.getLatitude());
 		cv.put(Constant.COLUMN_LOCATION_LONGITUDE, location.getLongitude());
 		cv.put(Constant.COLUMN_LOCATION_ALTITUDE, location.getAltitude());
 		cv.put(Constant.COLUMN_LOCATION_SPEED, location.getSpeed());
 		cv.put(Constant.COLUMN_LOCATION_PROVIDER, location.getProvider());
-		return getWritableDatabase().insert(Constant.TABLE_NAME, null, cv);
+		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, location.getTime());
+		cv.put(Constant.COLUMN_LOCATION_SERIES_MOV, series_mov);
+
+		return getWritableDatabase().insert(Constant.TABLE_NAME_LOCATION, null,
+				cv);
 
 	}
 
@@ -84,28 +84,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		getMyWritableDatabase().execSQL("delete from " + "location");
 		getMyWritableDatabase().execSQL("delete from " + "sqlite_sequence");
 
-	}
-
-	public Double getLocation(int columIndex, String columName, int namberColum) {
-
-		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null,
-				null, null, null, null, null);
-
-		cv.move(namberColum);
-		columIndex = cv.getColumnIndex(columName);
-
-		return cv.getDouble(columIndex);
-	}
-
-	public int getEndId(int columIndex) {
-
-		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME, null,
-				null, null, null, null, null);
-
-		cv.moveToLast();
-		columIndex = cv.getColumnIndex(Constant.COLUMN_LOCATION_ID);
-
-		return cv.getInt(columIndex);
 	}
 
 }

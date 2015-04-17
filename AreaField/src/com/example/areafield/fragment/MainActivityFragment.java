@@ -50,6 +50,8 @@ public class MainActivityFragment extends Fragment {
 	private WakeLock wakeLock;
 	private boolean gpsFix;
 
+	private long series_mov = 0;
+
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
 			startTime = 0L;
@@ -109,6 +111,8 @@ public class MainActivityFragment extends Fragment {
 				run_startButton.setEnabled(false);
 				gpsFix = true;
 
+				series_mov++;
+
 				wakeLock.acquire();
 
 			}
@@ -124,11 +128,11 @@ public class MainActivityFragment extends Fragment {
 
 				previousLocation = null;
 				distanceTraveled = 0;
-				
+
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
-				
+
 				timeInMilliseconds = 0L;
 				timeSwapBuff = 0L;
 				updatedTime = 0L;
@@ -138,9 +142,9 @@ public class MainActivityFragment extends Fragment {
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 
-				Cursor cv = dh.getMyWritableDatabase()
-						.query(Constant.TABLE_NAME, null, null, null, null,
-								null, null);
+				Cursor cv = dh.getMyWritableDatabase().query(
+						Constant.TABLE_NAME_LOCATION, null, null, null, null,
+						null, null);
 				cv.moveToFirst();
 
 				while (cv.isAfterLast() == false) {
@@ -199,7 +203,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -212,7 +216,7 @@ public class MainActivityFragment extends Fragment {
 
 			drawCalculateRouting(location, routingTextView, "draw");
 
-			dh.insertLocation(location);
+			dh.insertLocation(location, series_mov);
 			dh.close();
 
 		} else {
@@ -222,7 +226,7 @@ public class MainActivityFragment extends Fragment {
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
-				
+
 				gpsFix = true;
 			}
 
@@ -270,7 +274,7 @@ public class MainActivityFragment extends Fragment {
 	public void drawCalculateRouting(Location location, TextView textView,
 			String choice) {
 
-		Log.d(LOG_TAG, "Location " + location);
+		// Log.d(LOG_TAG, "Location " + location);
 
 		if (previousLocation != null) {
 
