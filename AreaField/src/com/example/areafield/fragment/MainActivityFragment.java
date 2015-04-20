@@ -10,6 +10,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -48,7 +49,7 @@ public class MainActivityFragment extends Fragment {
 	private GoogleMap mGoogleMap;
 	private Location previousLocation = null, myLocation = null;
 	private WakeLock wakeLock;
-	private boolean gpsFix;
+	private boolean gpsFix, firstLocation;
 
 	private long series_mov = 0;
 
@@ -110,8 +111,7 @@ public class MainActivityFragment extends Fragment {
 				run_stopButton.setEnabled(true);
 				run_startButton.setEnabled(false);
 				gpsFix = true;
-
-				series_mov++;
+				firstLocation = true;
 
 				wakeLock.acquire();
 
@@ -137,6 +137,8 @@ public class MainActivityFragment extends Fragment {
 				timeSwapBuff = 0L;
 				updatedTime = 0L;
 				startTime = 0L;
+				
+				firstLocation = false;
 
 				wakeLock.release();
 
@@ -203,7 +205,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() >  0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -217,6 +219,7 @@ public class MainActivityFragment extends Fragment {
 			drawCalculateRouting(location, routingTextView, "draw");
 
 			dh.insertLocation(location, series_mov);
+			dh.insertRun(location);
 			dh.close();
 
 		} else {
@@ -275,7 +278,16 @@ public class MainActivityFragment extends Fragment {
 			String choice) {
 
 		// Log.d(LOG_TAG, "Location " + location);
-
+		
+		if (firstLocation == true){
+			
+			LatLng startLocation = new LatLng(location.getLatitude(), location.getLongitude());
+			Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(startLocation));	
+			
+			firstLocation = false;
+			
+		}
+		
 		if (previousLocation != null) {
 
 			double lat1 = location.getLatitude();

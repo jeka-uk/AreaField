@@ -14,6 +14,9 @@ public class Constant {
 	public static final String COLUMN_LOCATION_PROVIDER = "provider";
 	public static final String COLUMN_LOCATION_TIMESTAMP = "timestamp";
 	public static final String COLUMN_LOCATION_SERIES_MOV = "series_mov";
+	public static final String COLUMN_LOCATION_START_DATA = "start_date";
+	
+	
 	
 	
 	
