@@ -137,7 +137,7 @@ public class MainActivityFragment extends Fragment {
 				timeSwapBuff = 0L;
 				updatedTime = 0L;
 				startTime = 0L;
-				
+
 				firstLocation = false;
 
 				wakeLock.release();
@@ -205,7 +205,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() >  0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -237,23 +237,6 @@ public class MainActivityFragment extends Fragment {
 
 	}
 
-	public void addMarkerStartFinish(LatLng mLatLng, String choice) {
-
-		MarkerOptions markerOptions = new MarkerOptions();
-		markerOptions.position(mLatLng);
-
-		if (choice == "start") {
-
-			markerOptions.icon(BitmapDescriptorFactory
-					.fromResource(R.drawable.st_marker));
-		} else {
-			markerOptions.icon(BitmapDescriptorFactory
-					.fromResource(R.drawable.fi_marker));
-		}
-
-		mGoogleMap.addMarker(markerOptions);
-	}
-
 	public void starGoogleMap() {
 
 		UiSettings uiSettings = mGoogleMap.getUiSettings();
@@ -278,17 +261,20 @@ public class MainActivityFragment extends Fragment {
 			String choice) {
 
 		// Log.d(LOG_TAG, "Location " + location);
-		
-		if (firstLocation == true){
-			
-			LatLng startLocation = new LatLng(location.getLatitude(), location.getLongitude());
-			Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(startLocation).icon(BitmapDescriptorFactory
-					.fromResource(R.drawable.testmarker)));	
-			
+
+		if (firstLocation == true) {
+
+			LatLng startLocation = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			Marker melbourne = mGoogleMap.addMarker(new MarkerOptions()
+					.position(startLocation).icon(
+							BitmapDescriptorFactory
+									.fromResource(R.drawable.testmarker)));
+
 			firstLocation = false;
-			
+
 		}
-		
+
 		if (previousLocation != null) {
 
 			double lat1 = location.getLatitude();
