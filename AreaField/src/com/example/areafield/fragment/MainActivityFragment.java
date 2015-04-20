@@ -282,7 +282,8 @@ public class MainActivityFragment extends Fragment {
 		if (firstLocation == true){
 			
 			LatLng startLocation = new LatLng(location.getLatitude(), location.getLongitude());
-			Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(startLocation));	
+			Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(startLocation).icon(BitmapDescriptorFactory
+					.fromResource(R.drawable.testmarker)));	
 			
 			firstLocation = false;
 			

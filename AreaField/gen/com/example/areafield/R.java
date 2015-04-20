@@ -1530,6 +1530,7 @@ containing a value of this type.
         public static final int powered_by_google_dark=0x7f020077;
         public static final int powered_by_google_light=0x7f020078;
         public static final int st_marker=0x7f020079;
+        public static final int testmarker=0x7f02007a;
     }
     public static final class id {
         public static final int action_bar=0x7f0c0032;
