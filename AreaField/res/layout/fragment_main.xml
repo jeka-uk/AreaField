@@ -8,13 +8,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="left"
             android:paddingRight="5sp"
             android:text="@string/speed" />
 
         <TextView
             android:id="@+id/run_speedTextView"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>
 
@@ -23,13 +23,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="left"
             android:paddingRight="5sp"
             android:text="@string/latitude" />
 
         <TextView
             android:id="@+id/run_latitudeTextView"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>
 
@@ -38,31 +38,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="left"
             android:paddingRight="5sp"
             android:text="@string/longitude" />
 
         <TextView
             android:id="@+id/run_longitudeTextView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingRight="5sp"
-            android:text="@string/altitude" />
-
-        <TextView
-            android:id="@+id/run_altitudeTextView"
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </TableRow>
 
+    
     <TableRow>
 
         <TextView
@@ -74,10 +60,33 @@
 
         <TextView
             android:id="@+id/run_durationTextView"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:maxLength="7"
+             />
+    </TableRow>
+    
+    <TableRow android:focusable="false" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="5sp"
+            android:text="@string/widthplow" />
+        
+        <EditText
+        android:id="@+id/widthPlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="5"
+        android:ems="2" >
+
+        <requestFocus />
+    </EditText>
     </TableRow>
 
     <TableRow>
@@ -85,14 +94,33 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="left"
             android:paddingRight="5sp"
             android:text="@string/routing" />
 
         <TextView
             android:id="@+id/routingTextView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="5"
+            android:gravity="left" />
+        
+        
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="5sp"
+            android:text="@string/areaplowed" />
+
+        <TextView
+            android:id="@+id/areaplowed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="8" />
+        
+        
     </TableRow>
 
     <LinearLayout
@@ -121,4 +149,5 @@
         android:layout_height="match_parent" >
     </fragment>
 
+    
 </TableLayout>

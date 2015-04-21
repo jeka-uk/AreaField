@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:paddingRight="5sp"
-                android:text="@string/altitude" />
+                android:text="@string/widthplow" />
 
             <TextView
                 android:id="@+id/run_altitudeTextView"

@@ -4,11 +4,13 @@
     <string name="app_name">AreaField</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    
     <string name="speed">Speed:</string>
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
-    <string name="altitude">Altitude:</string>
+    <string name="widthplow">Width plow:</string>
+    <string name="inputdataplow">Input width plow</string>
+    <string name="areaplowed">Area plowed:</string>
+    <string name="tost_width_plow">"Input Width Plow in m"</string>
     <string name="elapsed_time">Elapsed Time:</string>
     <string name="routing">Routing:</string>
     <string name="start">Start</string>

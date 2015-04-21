@@ -1544,11 +1544,12 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0c0002;
         public static final int action_menu_presenter=0x7f0c0003;
         public static final int action_mode_close_button=0x7f0c003a;
-        public static final int action_settings=0x7f0c005d;
+        public static final int action_settings=0x7f0c005f;
         public static final int activity_chooser_view_content=0x7f0c003b;
         public static final int adjust_height=0x7f0c0006;
         public static final int adjust_width=0x7f0c0007;
         public static final int always=0x7f0c0026;
+        public static final int areaplowed=0x7f0c0059;
         public static final int beginning=0x7f0c002d;
         public static final int book_now=0x7f0c0016;
         public static final int buyButton=0x7f0c0012;
@@ -1578,7 +1579,7 @@ containing a value of this type.
         public static final int image=0x7f0c003d;
         public static final int listMode=0x7f0c001e;
         public static final int list_item=0x7f0c003f;
-        public static final int map=0x7f0c005b;
+        public static final int map=0x7f0c005c;
         public static final int match_parent=0x7f0c0014;
         public static final int middle=0x7f0c002f;
         public static final int monochrome=0x7f0c001c;
@@ -1590,13 +1591,13 @@ containing a value of this type.
         public static final int progress_horizontal=0x7f0c0005;
         public static final int radio=0x7f0c0045;
         public static final int routingTextView=0x7f0c0058;
-        public static final int run_altitudeTextView=0x7f0c0056;
-        public static final int run_durationTextView=0x7f0c0057;
+        public static final int run_altitudeTextView=0x7f0c005e;
+        public static final int run_durationTextView=0x7f0c0056;
         public static final int run_latitudeTextView=0x7f0c0054;
         public static final int run_longitudeTextView=0x7f0c0055;
         public static final int run_speedTextView=0x7f0c0053;
-        public static final int run_startButton=0x7f0c0059;
-        public static final int run_stopButton=0x7f0c005a;
+        public static final int run_startButton=0x7f0c005a;
+        public static final int run_stopButton=0x7f0c005b;
         public static final int sandbox=0x7f0c0010;
         public static final int satellite=0x7f0c000b;
         public static final int search_badge=0x7f0c0048;
@@ -1619,12 +1620,13 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f0c0011;
         public static final int submit_area=0x7f0c004f;
         public static final int tabMode=0x7f0c001f;
-        public static final int tableLayout=0x7f0c005c;
+        public static final int tableLayout=0x7f0c005d;
         public static final int terrain=0x7f0c000c;
         public static final int title=0x7f0c0041;
         public static final int top_action_bar=0x7f0c0036;
         public static final int up=0x7f0c0037;
         public static final int useLogo=0x7f0c0025;
+        public static final int widthPlow=0x7f0c0057;
         public static final int withText=0x7f0c002a;
         public static final int wrap_content=0x7f0c0015;
     }
@@ -1734,8 +1736,8 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f070031;
         public static final int accept=0x7f070002;
         public static final int action_settings=0x7f070035;
-        public static final int altitude=0x7f070039;
         public static final int app_name=0x7f070033;
+        public static final int areaplowed=0x7f07003b;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f070009;
@@ -1847,28 +1849,31 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f070005;
         public static final int create_calendar_title=0x7f070004;
         public static final int decline=0x7f070003;
-        public static final int elapsed_time=0x7f07003a;
-        public static final int gps_disabled=0x7f07003f;
-        public static final int gps_enabled=0x7f07003e;
+        public static final int elapsed_time=0x7f07003d;
+        public static final int gps_disabled=0x7f070042;
+        public static final int gps_enabled=0x7f070041;
         public static final int hello_world=0x7f070034;
+        public static final int inputdataplow=0x7f07003a;
         public static final int latitude=0x7f070037;
         public static final int longitude=0x7f070038;
-        public static final int map=0x7f070041;
-        public static final int new_run=0x7f070040;
-        public static final int routing=0x7f07003b;
-        public static final int run_finish=0x7f070044;
-        public static final int run_finished_at_format=0x7f070045;
-        public static final int run_start=0x7f070042;
-        public static final int run_started_at_format=0x7f070043;
+        public static final int map=0x7f070044;
+        public static final int new_run=0x7f070043;
+        public static final int routing=0x7f07003e;
+        public static final int run_finish=0x7f070047;
+        public static final int run_finished_at_format=0x7f070048;
+        public static final int run_start=0x7f070045;
+        public static final int run_started_at_format=0x7f070046;
         public static final int speed=0x7f070036;
-        public static final int start=0x7f07003c;
-        public static final int stop=0x7f07003d;
+        public static final int start=0x7f07003f;
+        public static final int stop=0x7f070040;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
+        public static final int tost_width_plow=0x7f07003c;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f070025;
+        public static final int widthplow=0x7f070039;
     }
     public static final class style {
         /** 

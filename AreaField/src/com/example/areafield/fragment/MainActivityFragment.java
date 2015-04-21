@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.sax.TextElementListener;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +44,10 @@ public class MainActivityFragment extends Fragment {
 
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
-			run_speedTextView, run_altitudeTextView, run_durationTextView,
-			routingTextView;
+			run_speedTextView, run_durationTextView,
+			routingTextView, areaplowed;
+	
+	private EditText widthPlow;
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
@@ -52,11 +56,13 @@ public class MainActivityFragment extends Fragment {
 	private boolean gpsFix, firstLocation;
 
 	private long series_mov = 0;
+	
+	private int widthplow;
 
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
 			startTime = 0L;
-	private float distanceTraveled = 0;
+	private float distanceTraveled = 0, areaplow = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,8 +94,9 @@ public class MainActivityFragment extends Fragment {
 				.findViewById(R.id.run_longitudeTextView);
 		run_speedTextView = (TextView) view
 				.findViewById(R.id.run_speedTextView);
-		run_altitudeTextView = (TextView) view
-				.findViewById(R.id.run_altitudeTextView);
+		areaplowed = (TextView) view.findViewById(R.id.areaplowed);
+		widthPlow = (EditText) view
+				.findViewById(R.id.widthPlow);
 		run_durationTextView = (TextView) view
 				.findViewById(R.id.run_durationTextView);
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
@@ -104,16 +111,37 @@ public class MainActivityFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+				
+				
+				if (widthPlow.getText().length() == 0){
+					
+					/*Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+							getString(R.string.tost_width_plow), Toast.LENGTH_SHORT); 
+							toast.show(); 
+					*/
+					
+					Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+							"kkjs", Toast.LENGTH_SHORT); 
+							toast.show(); 
+					
+				}else{
+					
+					mLocationManager.requestLocationUpdates(
+							LocationManager.GPS_PROVIDER, 1, 0, locationListener);
 
-				mLocationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 1, 0, locationListener);
+					run_stopButton.setEnabled(true);
+					run_startButton.setEnabled(false);
+					gpsFix = true;
+					firstLocation = true;
+					widthPlow.setEnabled(false);
+					
+					widthplow = Integer.parseInt(widthPlow.getText().toString());
 
-				run_stopButton.setEnabled(true);
-				run_startButton.setEnabled(false);
-				gpsFix = true;
-				firstLocation = true;
+					wakeLock.acquire();
+					
+				}
 
-				wakeLock.acquire();
+				
 
 			}
 		});
@@ -125,6 +153,7 @@ public class MainActivityFragment extends Fragment {
 				mLocationManager.removeUpdates(locationListener);
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
+				widthPlow.setEnabled(true);
 
 				previousLocation = null;
 				distanceTraveled = 0;
@@ -201,7 +230,7 @@ public class MainActivityFragment extends Fragment {
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
-		run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		//run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 
 		movingCamera(location);
 
@@ -294,6 +323,9 @@ public class MainActivityFragment extends Fragment {
 			double d = R * c * 1000;
 
 			distanceTraveled += d;
+			
+			areaplow += (d * widthplow)/10000;
+			
 
 			if (choice == "draw") {
 
@@ -313,7 +345,9 @@ public class MainActivityFragment extends Fragment {
 
 		previousLocation = location;
 
-		textView.setText(String.valueOf(distanceTraveled + " m"));
+		textView.setText(String.valueOf(distanceTraveled));
+		
+		areaplowed.setText(String.valueOf(areaplow));
 
 	}
 
