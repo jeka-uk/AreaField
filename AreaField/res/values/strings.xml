@@ -10,9 +10,13 @@
     <string name="widthplow">Width plow:</string>
     <string name="inputdataplow">Input width plow</string>
     <string name="areaplowed">Area plowed:</string>
-    <string name="tost_width_plow">"Input Width Plow in m"</string>
+    <string name="tost_width_plow">"Input width plow in metr"</string>
     <string name="elapsed_time">Elapsed Time:</string>
     <string name="routing">Routing:</string>
+     <string name="size_m">м</string>
+    <string name="size_g">га</string>
+    <string name="size_spedd">км/ч</string>
+    
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="gps_enabled">GPS Enabled</string>

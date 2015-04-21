@@ -7,11 +7,18 @@
     <string name="speed">Скорость:</string>
     <string name="latitude">Широта:</string>
     <string name="longitude">Долгота:</string>
-    <string name="widthplow">Ширина захвата плуга в м:</string>
-    <string name="areaplowed">S в га:</string>
+    <string name="widthplow">Захвата плуга в м:</string>
+    <string name="areaplowed">Площадь:</string>
     <string name="tost_width_plow">"Введите ширина захвата плуга в М"</string>
     <string name="elapsed_time">Время работы:</string>
-    <string name="routing">Маршрут в м:</string>
+    <string name="routing">Маршрут:</string>
+    
+    <string name="size_m">м</string>
+    <string name="size_g">га</string>
+    
+    
+    
+    
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
     <string name="gps_enabled">GPS Enabled</string>

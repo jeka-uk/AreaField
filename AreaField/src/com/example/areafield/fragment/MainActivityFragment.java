@@ -44,9 +44,9 @@ public class MainActivityFragment extends Fragment {
 
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
-			run_speedTextView, run_durationTextView,
-			routingTextView, areaplowed;
-	
+			run_speedTextView, run_durationTextView, routingTextView,
+			areaplowed;
+
 	private EditText widthPlow;
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
@@ -56,7 +56,7 @@ public class MainActivityFragment extends Fragment {
 	private boolean gpsFix, firstLocation;
 
 	private long series_mov = 0;
-	
+
 	private int widthplow;
 
 	private Handler customHandler = new Handler();
@@ -95,8 +95,7 @@ public class MainActivityFragment extends Fragment {
 		run_speedTextView = (TextView) view
 				.findViewById(R.id.run_speedTextView);
 		areaplowed = (TextView) view.findViewById(R.id.areaplowed);
-		widthPlow = (EditText) view
-				.findViewById(R.id.widthPlow);
+		widthPlow = (EditText) view.findViewById(R.id.widthPlow);
 		run_durationTextView = (TextView) view
 				.findViewById(R.id.run_durationTextView);
 		run_startButton = (Button) view.findViewById(R.id.run_startButton);
@@ -111,37 +110,33 @@ public class MainActivityFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				
-				
-				if (widthPlow.getText().length() == 0){
-					
-					/*Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
-							getString(R.string.tost_width_plow), Toast.LENGTH_SHORT); 
-							toast.show(); 
-					*/
-					
-					Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
-							"kkjs", Toast.LENGTH_SHORT); 
-							toast.show(); 
-					
-				}else{
-					
+
+				if (widthPlow.getText().length() == 0) {
+
+					Toast toast = Toast.makeText(getActivity()
+							.getApplicationContext(),
+							getString(R.string.tost_width_plow),
+							Toast.LENGTH_SHORT);
+					toast.show();
+
+				} else {
+
 					mLocationManager.requestLocationUpdates(
-							LocationManager.GPS_PROVIDER, 1, 0, locationListener);
+							LocationManager.GPS_PROVIDER, 1, 0,
+							locationListener);
 
 					run_stopButton.setEnabled(true);
 					run_startButton.setEnabled(false);
 					gpsFix = true;
 					firstLocation = true;
 					widthPlow.setEnabled(false);
-					
-					widthplow = Integer.parseInt(widthPlow.getText().toString());
+
+					widthplow = Integer
+							.parseInt(widthPlow.getText().toString());
 
 					wakeLock.acquire();
-					
-				}
 
-				
+				}
 
 			}
 		});
@@ -229,12 +224,12 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)));
-		//run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)) + getString(R.string.size_spedd));
+		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -248,7 +243,6 @@ public class MainActivityFragment extends Fragment {
 			drawCalculateRouting(location, routingTextView, "draw");
 
 			dh.insertLocation(location, series_mov);
-			dh.insertRun(location);
 			dh.close();
 
 		} else {
@@ -323,9 +317,8 @@ public class MainActivityFragment extends Fragment {
 			double d = R * c * 1000;
 
 			distanceTraveled += d;
-			
-			areaplow += (d * widthplow)/10000;
-			
+
+			areaplow += (d * widthplow) / 10000;
 
 			if (choice == "draw") {
 
@@ -345,9 +338,9 @@ public class MainActivityFragment extends Fragment {
 
 		previousLocation = location;
 
-		textView.setText(String.valueOf(distanceTraveled));
-		
-		areaplowed.setText(String.valueOf(areaplow));
+		textView.setText(String.valueOf(distanceTraveled) + getString(R.string.size_m));
+
+		areaplowed.setText(String.valueOf(areaplow) + getString(R.string.size_g));
 
 	}
 

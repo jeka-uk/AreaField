@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
 
     <TableRow>
@@ -10,12 +10,14 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/speed" />
 
         <TextView
             android:id="@+id/run_speedTextView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="9"  />
     </TableRow>
 
     <TableRow>
@@ -25,12 +27,14 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/latitude" />
 
         <TextView
             android:id="@+id/run_latitudeTextView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="9"  />
     </TableRow>
 
     <TableRow>
@@ -40,22 +44,29 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/longitude" />
 
         <TextView
             android:id="@+id/run_longitudeTextView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="9"  />
     </TableRow>
 
     
     <TableRow>
+        
+        
+        
+        
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/elapsed_time" />
 
         <TextView
@@ -75,6 +86,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/widthplow" />
         
         <EditText
@@ -96,6 +108,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5sp"
+            android:layout_marginLeft="@dimen/padding" 
             android:text="@string/routing" />
 
         <TextView
@@ -118,7 +131,7 @@
             android:id="@+id/areaplowed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="8" />
+            android:maxLength="6" />
         
         
     </TableRow>
@@ -146,7 +159,10 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent" 
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginRight="@dimen/padding"
+        android:layout_marginBottom="@dimen/padding" >
     </fragment>
 
     

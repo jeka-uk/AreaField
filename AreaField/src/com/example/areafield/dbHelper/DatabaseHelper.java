@@ -51,15 +51,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		
-		db.execSQL("create table run (" +
-				 "_id integer primary key autoincrement, start_date integer)");
 		
 		// Create table location
 		db.execSQL("create table location ("
 				+ "_id integer primary key autoincrement," + "latitude real,"
 				+ "longitude real," + "altitude real," + "speed real,"
 				+ "provider varchar(100)," + "timestamp integer,"
-				+ "series_mov integer, references run(_id))" + ");");
+				+ "series_mov integer" + ");");
 
 	}
 
