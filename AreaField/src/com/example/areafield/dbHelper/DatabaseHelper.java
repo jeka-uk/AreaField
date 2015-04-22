@@ -50,8 +50,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		
-		
+
+		// Create table series
+		db.execSQL("create table series ("
+				+ "_id integer primary key autoincrement,"
+				+ "timestamp integer," + "nameseries text," + "routing integer," + "areaplowed integer" + ");");
+
 		// Create table location
 		db.execSQL("create table location ("
 				+ "_id integer primary key autoincrement," + "latitude real,"
@@ -81,12 +85,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
-	public long insertRun(Location location) {
+	public long insertSeries(Location location) {
 		ContentValues cv = new ContentValues();		
-		cv.put(Constant.COLUMN_LOCATION_START_DATA, location.getTime());
+		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, location.getTime());
 
-		return getWritableDatabase().insert(Constant.TABLE_NAME_RUN, null,
+		return getWritableDatabase().insert(Constant.TABLE_NAME_SERIES, null,
 				cv);
+
 	}
 
 	public void cleardata() {

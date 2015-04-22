@@ -53,15 +53,13 @@ public class MainActivityFragment extends Fragment {
 	private GoogleMap mGoogleMap;
 	private Location previousLocation = null, myLocation = null;
 	private WakeLock wakeLock;
-	private boolean gpsFix, firstLocation;
+	private boolean gpsFix, firstLocation, writedata;
 
-	private long series_mov = 0;
-
-	private int widthplow;
+	private int widthplow = 0;
 
 	private Handler customHandler = new Handler();
 	private long timeInMilliseconds = 0L, timeSwapBuff = 0L, updatedTime = 0L,
-			startTime = 0L;
+			startTime = 0L, series_mov = 0;
 	private float distanceTraveled = 0, areaplow = 0;
 
 	@Override
@@ -84,9 +82,9 @@ public class MainActivityFragment extends Fragment {
 
 		starGoogleMap();
 
-		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		/*DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 		dh.cleardata();
-		dh.close();
+		dh.close();*/
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -149,6 +147,7 @@ public class MainActivityFragment extends Fragment {
 				run_startButton.setEnabled(true);
 				run_stopButton.setEnabled(false);
 				widthPlow.setEnabled(true);
+				writedata = false;
 
 				previousLocation = null;
 				distanceTraveled = 0;
@@ -220,8 +219,6 @@ public class MainActivityFragment extends Fragment {
 		if (location == null)
 			return;
 
-		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)) + getString(R.string.size_spedd));
@@ -229,7 +226,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -242,8 +239,7 @@ public class MainActivityFragment extends Fragment {
 
 			drawCalculateRouting(location, routingTextView, "draw");
 
-			dh.insertLocation(location, series_mov);
-			dh.close();
+			writeLocationToDB(location);
 
 		} else {
 
@@ -367,5 +363,31 @@ public class MainActivityFragment extends Fragment {
 		}
 
 	};
+	
+	private void writeLocationToDB(Location location){
+		
+				
+		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		
+		if(writedata == false){
+			
+			dh.insertSeries(location);
+			dh.close();
+			
+			Cursor cv = dh.getMyWritableDatabase().query(
+					Constant.TABLE_NAME_SERIES, null, null, null, null,
+					null, null);
+			cv.moveToLast();
+			
+			series_mov = cv.getLong(cv.getColumnIndex(Constant.COLUMN_SERIES_ID));
+			
+			writedata = true;
+			
+		}
+		
+		dh.insertLocation(location, series_mov);
+		dh.close();
+		
+	}
 
 }
