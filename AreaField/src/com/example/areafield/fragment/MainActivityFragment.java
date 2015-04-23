@@ -226,7 +226,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
