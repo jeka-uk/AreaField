@@ -100,5 +100,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		getMyWritableDatabase().execSQL("delete from " + "sqlite_sequence");
 
 	}
+	
+	public Cursor getAllDataSeries(){
+		
+		Cursor cv = getMyWritableDatabase().query(
+				Constant.TABLE_NAME_SERIES, null, null, null, null,
+				null, null);
+		
+		return cv;
+		
+	}
+	
 
 }
