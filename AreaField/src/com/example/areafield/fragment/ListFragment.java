@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 public class ListFragment extends Fragment {
 
-	private TextView textView_id, textView_time_stemp;
+	
 	private ListView listViewSeries;
 
 	@Override
@@ -44,7 +44,7 @@ public class ListFragment extends Fragment {
 		Cursor cv = dh.getAllDataSeries();
 
 			String[] fromFielsName = new String[]{Constant.COLUMN_SERIES_ID, Constant.COLUMN_SERIES_TIMESTAMP};
-			int[] toViewIds = new int[]{R.id.rank, R.id.country};
+			int[] toViewIds = new int[]{R.id.area, R.id.artist};
 			SimpleCursorAdapter mySimpleCursorAdapter;
 			mySimpleCursorAdapter = new SimpleCursorAdapter(getActivity().getBaseContext(),R.layout.item_layout_for_listview, cv, fromFielsName, toViewIds, 0);
 			myListView.setAdapter(mySimpleCursorAdapter);
