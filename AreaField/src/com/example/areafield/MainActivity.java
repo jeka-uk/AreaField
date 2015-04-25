@@ -1,7 +1,7 @@
 package com.example.areafield;
 
 import com.example.areafield.fragment.ListFragment;
-import com.example.areafield.fragment.MainActivityFragment;
+
 
 import android.support.v4.app.Fragment;
 

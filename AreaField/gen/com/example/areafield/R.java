@@ -1545,7 +1545,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0c0002;
         public static final int action_menu_presenter=0x7f0c0003;
         public static final int action_mode_close_button=0x7f0c003a;
-        public static final int action_settings=0x7f0c0065;
+        public static final int action_settings=0x7f0c0068;
         public static final int activity_chooser_view_content=0x7f0c003b;
         public static final int adjust_height=0x7f0c0006;
         public static final int adjust_width=0x7f0c0007;
@@ -1555,6 +1555,7 @@ containing a value of this type.
         public static final int artist=0x7f0c0061;
         public static final int beginning=0x7f0c002d;
         public static final int book_now=0x7f0c0016;
+        public static final int bootonlayout=0x7f0c0065;
         public static final int buyButton=0x7f0c0012;
         public static final int buy_now=0x7f0c0017;
         public static final int buy_with_google=0x7f0c0018;
@@ -1567,11 +1568,11 @@ containing a value of this type.
         public static final int disableHome=0x7f0c0020;
         public static final int donate_with_google=0x7f0c0019;
         public static final int dropdown=0x7f0c002c;
-        public static final int duration=0x7f0c0062;
         public static final int edit_query=0x7f0c0046;
         public static final int end=0x7f0c002e;
         public static final int expand_activities_button=0x7f0c003c;
         public static final int expanded_menu=0x7f0c0042;
+        public static final int finishlistfragment=0x7f0c0067;
         public static final int grayscale=0x7f0c001b;
         public static final int holo_dark=0x7f0c000d;
         public static final int holo_light=0x7f0c000e;
@@ -1623,12 +1624,14 @@ containing a value of this type.
         public static final int showTitle=0x7f0c0024;
         public static final int slide=0x7f0c001d;
         public static final int split_action_bar=0x7f0c0034;
+        public static final int startlistfragment=0x7f0c0066;
         public static final int strict_sandbox=0x7f0c0011;
         public static final int submit_area=0x7f0c004f;
         public static final int tabMode=0x7f0c001f;
         public static final int tableLayout=0x7f0c005d;
         public static final int terrain=0x7f0c000c;
         public static final int thumbnail=0x7f0c005f;
+        public static final int timestemp=0x7f0c0062;
         public static final int title=0x7f0c0041;
         public static final int top_action_bar=0x7f0c0036;
         public static final int up=0x7f0c0037;

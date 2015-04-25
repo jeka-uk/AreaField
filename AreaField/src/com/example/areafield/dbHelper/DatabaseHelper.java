@@ -1,5 +1,9 @@
 package com.example.areafield.dbHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import com.example.areafield.Constant;
 
 import android.content.ContentValues;
@@ -87,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public long insertSeries(Location location) {
 		ContentValues cv = new ContentValues();		
-		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, location.getTime());
+		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, String.valueOf(createDate(location.getTime())));
 
 		return getWritableDatabase().insert(Constant.TABLE_NAME_SERIES, null,
 				cv);
@@ -97,6 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void cleardata() {
 
 		getMyWritableDatabase().execSQL("delete from " + "location");
+		getMyWritableDatabase().execSQL("delete from " + "series");
 		getMyWritableDatabase().execSQL("delete from " + "sqlite_sequence");
 
 	}
@@ -110,6 +115,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return cv;
 		
 	}
+	
+	public static CharSequence createDate(long timestamp) {
+	    Calendar c = Calendar.getInstance();
+	    c.setTimeInMillis(timestamp);
+	    Date d = c.getTime();
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+	    return sdf.format(d);
+	  }
 	
 
 }

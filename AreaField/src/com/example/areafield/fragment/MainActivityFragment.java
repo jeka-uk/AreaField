@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import android.R.bool;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -26,9 +25,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
-import android.sax.TextElementListener;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,7 +37,7 @@ import android.widget.Toast;
 
 public class MainActivityFragment extends Fragment {
 
-	private final String LOG_TAG = "myLogs";
+	// private final String LOG_TAG = "myLogs";
 
 	private LocationManager mLocationManager;
 	private TextView run_latitudeTextView, run_longitudeTextView,
@@ -51,7 +48,7 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private Location previousLocation = null, myLocation = null;
+	private Location previousLocation = null;
 	private WakeLock wakeLock;
 	private boolean gpsFix, firstLocation, writedata;
 
@@ -82,9 +79,10 @@ public class MainActivityFragment extends Fragment {
 
 		starGoogleMap();
 
-		/*DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-		dh.cleardata();
-		dh.close();*/
+		/*
+		 * DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		 * dh.cleardata(); dh.close();
+		 */
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -221,7 +219,8 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6)) + getString(R.string.size_spedd));
+		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6))
+				+ getString(R.string.size_spedd));
 		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 
 		movingCamera(location);
@@ -334,9 +333,11 @@ public class MainActivityFragment extends Fragment {
 
 		previousLocation = location;
 
-		textView.setText(String.valueOf(distanceTraveled) + getString(R.string.size_m));
+		textView.setText(String.valueOf(distanceTraveled)
+				+ getString(R.string.size_m));
 
-		areaplowed.setText(String.valueOf(areaplow) + getString(R.string.size_g));
+		areaplowed.setText(String.valueOf(areaplow)
+				+ getString(R.string.size_g));
 
 	}
 
@@ -363,31 +364,31 @@ public class MainActivityFragment extends Fragment {
 		}
 
 	};
-	
-	private void writeLocationToDB(Location location){
-		
-				
+
+	private void writeLocationToDB(Location location) {
+
 		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-		
-		if(writedata == false){
-			
+
+		if (writedata == false) {
+
 			dh.insertSeries(location);
 			dh.close();
-			
+
 			Cursor cv = dh.getMyWritableDatabase().query(
-					Constant.TABLE_NAME_SERIES, null, null, null, null,
-					null, null);
+					Constant.TABLE_NAME_SERIES, null, null, null, null, null,
+					null);
 			cv.moveToLast();
-			
-			series_mov = cv.getLong(cv.getColumnIndex(Constant.COLUMN_SERIES_ID));
-			
+
+			series_mov = cv.getLong(cv
+					.getColumnIndex(Constant.COLUMN_SERIES_ID));
+
 			writedata = true;
-			
+
 		}
-		
+
 		dh.insertLocation(location, series_mov);
 		dh.close();
-		
+
 	}
 
 }
