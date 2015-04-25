@@ -7,7 +7,7 @@
     <string name="speed">Скорость:</string>
     <string name="latitude">Широта:</string>
     <string name="longitude">Долгота:</string>
-    <string name="widthplow">Захвата плуга в м:</string>
+    <string name="widthplow">Захват плуга в м:</string>
     <string name="areaplowed">Площадь:</string>
     <string name="tost_width_plow">"Введите ширина захвата плуга в м"</string>
     <string name="elapsed_time">Время работы:</string>

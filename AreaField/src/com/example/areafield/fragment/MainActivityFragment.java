@@ -1,5 +1,7 @@
 package com.example.areafield.fragment;
 
+import java.text.DecimalFormat;
+
 import com.example.areafield.Constant;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -213,15 +215,18 @@ public class MainActivityFragment extends Fragment {
 	};
 
 	private void showLocation(Location location) {
+		
+		DecimalFormat dec = new DecimalFormat("0.0");
 
 		if (location == null)
 			return;
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(Double.toString((location.getSpeed() * 3.6))
-				+ getString(R.string.size_spedd));
+		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6)+ getString(R.string.size_spedd));
 		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
+		
+		
 
 		movingCamera(location);
 
