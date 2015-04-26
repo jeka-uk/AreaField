@@ -11,11 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ListFragment extends Fragment {
-
+	
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -44,6 +49,20 @@ public class ListFragment extends Fragment {
 
 			}
 		});
+		
+		
+		myListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				Toast toast = Toast.makeText(getActivity().getApplicationContext(), String.valueOf(parent.getItemIdAtPosition(position)) ,Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		});
+		
+		
 
 		return view;
 	}
@@ -54,7 +73,8 @@ public class ListFragment extends Fragment {
 
 		Cursor cv = dh.getAllDataSeries();
 
-		String[] fromFielsName = new String[] { Constant.COLUMN_SERIES_TIMESTAMP, Constant.COLUMN_SERIES_NAMESERIES, Constant.COLUMN_SERIES_ROUTING, Constant.COLUMN_SERIES_AREAPLOWED, Constant.COLUMN_SERIES_ID};
+		String [] fromFielsName = new String[] { Constant.COLUMN_SERIES_TIMESTAMP, Constant.COLUMN_SERIES_NAMESERIES, Constant.COLUMN_SERIES_ROUTING, Constant.COLUMN_SERIES_AREAPLOWED};
+
 		int[] toViewIds = new int[] { R.id.timestemp, R.id.title, R.id.routing, R.id.area };
 		SimpleCursorAdapter mySimpleCursorAdapter;
 		mySimpleCursorAdapter = new SimpleCursorAdapter(getActivity()
