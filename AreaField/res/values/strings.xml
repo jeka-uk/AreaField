@@ -16,6 +16,9 @@
      <string name="size_m">м</string>
     <string name="size_g">га</string>
     <string name="size_spedd">км/ч</string>
+    <string name="nameSeries">Name of series</string>
+    <string name="saveSeries">Save the series</string>
+    
     
     <string name="start">Start</string>
     <string name="stop">Stop</string>

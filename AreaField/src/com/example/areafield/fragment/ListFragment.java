@@ -19,16 +19,16 @@ public class ListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.listfragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_list, container, false);
 
 		ListView myListView = (ListView) view.findViewById(R.id.listViewSeries);
 		Button startlist = (Button) view.findViewById(R.id.startlistfragment);
 	 // Button finishlist = (Button) view.findViewById(R.id.finishlistfragment);
 
-		/*
-		 * DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-		 * dh.cleardata(); dh.close();
-		 */
+		
+		  /*DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+		  dh.cleardata(); dh.close();*/
+		 
 
 		viewAllDataSeries(myListView);
 
@@ -54,12 +54,11 @@ public class ListFragment extends Fragment {
 
 		Cursor cv = dh.getAllDataSeries();
 
-		String[] fromFielsName = new String[] { Constant.COLUMN_SERIES_ID,
-				Constant.COLUMN_SERIES_TIMESTAMP };
-		int[] toViewIds = new int[] { R.id.area, R.id.timestemp };
+		String[] fromFielsName = new String[] { Constant.COLUMN_SERIES_TIMESTAMP, Constant.COLUMN_SERIES_NAMESERIES, Constant.COLUMN_SERIES_ROUTING, Constant.COLUMN_SERIES_AREAPLOWED, Constant.COLUMN_SERIES_ID};
+		int[] toViewIds = new int[] { R.id.timestemp, R.id.title, R.id.routing, R.id.area };
 		SimpleCursorAdapter mySimpleCursorAdapter;
 		mySimpleCursorAdapter = new SimpleCursorAdapter(getActivity()
-				.getBaseContext(), R.layout.item_layout_for_listview, cv,
+				.getBaseContext(), R.layout.item_layout, cv,
 				fromFielsName, toViewIds, 0);
 		myListView.setAdapter(mySimpleCursorAdapter);
 

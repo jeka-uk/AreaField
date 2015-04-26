@@ -12,6 +12,9 @@
     <string name="tost_width_plow">"Введите ширина захвата плуга в м"</string>
     <string name="elapsed_time">Время работы:</string>
     <string name="routing">Маршрут:</string>
+    <string name="nameSeries">Название</string>
+    <string name="saveSeries">Сохранить</string>
+    
     
     <string name="size_m">м</string>
     <string name="size_g">га</string>

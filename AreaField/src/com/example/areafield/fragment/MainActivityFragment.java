@@ -61,6 +61,9 @@ public class MainActivityFragment extends Fragment {
 			startTime = 0L, series_mov = 0;
 	private float distanceTraveled = 0, areaplow = 0;
 
+	private DecimalFormat dec = new DecimalFormat("0.0");
+	private DecimalFormat decSecond = new DecimalFormat("0.00000");
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -215,18 +218,15 @@ public class MainActivityFragment extends Fragment {
 	};
 
 	private void showLocation(Location location) {
-		
-		DecimalFormat dec = new DecimalFormat("0.0");
 
 		if (location == null)
 			return;
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6)+ getString(R.string.size_spedd));
+		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " "
+				+ getString(R.string.size_spedd));
 		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
-		
-		
 
 		movingCamera(location);
 
@@ -338,10 +338,10 @@ public class MainActivityFragment extends Fragment {
 
 		previousLocation = location;
 
-		textView.setText(String.valueOf(distanceTraveled)
+		textView.setText(dec.format(distanceTraveled) + " "
 				+ getString(R.string.size_m));
 
-		areaplowed.setText(String.valueOf(areaplow)
+		areaplowed.setText(decSecond.format(areaplow) + " "
 				+ getString(R.string.size_g));
 
 	}
