@@ -96,8 +96,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 DecimalFormat areaplow = new DecimalFormat("0.00000");
 		
 		  ContentValues cv=new ContentValues();
-		  cv.put(Constant.COLUMN_SERIES_ROUTING, String.valueOf(royting.format(routing)));   
-		  cv.put(Constant.COLUMN_SERIES_AREAPLOWED, String.valueOf(areaplow.format(area)));
+		  cv.put(Constant.COLUMN_SERIES_ROUTING, String.valueOf(royting.format(routing)+" "+ "м"));   
+		  cv.put(Constant.COLUMN_SERIES_AREAPLOWED, String.valueOf(areaplow.format(area)+" "+ "га"));
 		  
 		  return getWritableDatabase().update(Constant.TABLE_NAME_SERIES, cv, Constant.COLUMN_SERIES_ID + " = ?", new String[] {String.valueOf(md) });
 		 }

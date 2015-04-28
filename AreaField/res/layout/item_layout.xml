@@ -29,6 +29,7 @@
         android:gravity="right"
         android:text="07:Apr:2015 5:45"
         android:textSize="10dip"
+        android:textStyle="bold"
         >
     </TextView>
 
