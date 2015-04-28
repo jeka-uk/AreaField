@@ -1545,7 +1545,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0c0002;
         public static final int action_menu_presenter=0x7f0c0003;
         public static final int action_mode_close_button=0x7f0c003a;
-        public static final int action_settings=0x7f0c006b;
+        public static final int action_settings=0x7f0c006e;
         public static final int activity_chooser_view_content=0x7f0c003b;
         public static final int adjust_height=0x7f0c0006;
         public static final int adjust_width=0x7f0c0007;
@@ -1598,7 +1598,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f0c0004;
         public static final int progress_horizontal=0x7f0c0005;
         public static final int radio=0x7f0c0045;
-        public static final int routing=0x7f0c0068;
+        public static final int routing=0x7f0c006d;
         public static final int routingTextView=0x7f0c005c;
         public static final int run_altitudeTextView=0x7f0c0062;
         public static final int run_durationTextView=0x7f0c005a;
@@ -1626,6 +1626,8 @@ containing a value of this type.
         public static final int showHome=0x7f0c0023;
         public static final int showTitle=0x7f0c0024;
         public static final int slide=0x7f0c001d;
+        public static final int spase=0x7f0c0069;
+        public static final int spase2=0x7f0c006c;
         public static final int split_action_bar=0x7f0c0034;
         public static final int startlistfragment=0x7f0c0055;
         public static final int strict_sandbox=0x7f0c0011;
@@ -1634,8 +1636,9 @@ containing a value of this type.
         public static final int tableLayout=0x7f0c0061;
         public static final int terrain=0x7f0c000c;
         public static final int thumbnail=0x7f0c0066;
-        public static final int timestemp=0x7f0c0069;
+        public static final int timestemp=0x7f0c0068;
         public static final int title=0x7f0c0041;
+        public static final int titleite=0x7f0c006b;
         public static final int top_action_bar=0x7f0c0036;
         public static final int up=0x7f0c0037;
         public static final int useLogo=0x7f0c0025;

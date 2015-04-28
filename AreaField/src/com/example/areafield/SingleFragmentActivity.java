@@ -19,7 +19,7 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
 		
 		if (fragment == null) {
 			fragment = createFragment();
-			fm.beginTransaction().add(R.id.container, fragment).addToBackStack("myBackStack").commit();
+			fm.beginTransaction().add(R.id.container, fragment).commit();
 		}
 				
 		

@@ -21,66 +21,72 @@
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
 
-    <!-- Title Of Song -->
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:text="Name series mov"
-        android:textColor="#040404"
-        android:textSize="15dip"
-        android:textStyle="bold"
-        android:typeface="sans" />
-
-    <!-- Artist Name -->
-
-    <TextView
-        android:id="@+id/routing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/title"
-        android:layout_below="@id/title"
-        android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:text="Routing  "
-        android:textColor="#343434"
-        android:textSize="10dip" />
-
-    <!-- Rightend Duration -->
-
     <TextView
         android:id="@+id/timestemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/title"
-        android:layout_marginRight="5dip"
         android:gravity="right"
         android:text="07:Apr:2015 5:45"
         android:textSize="10dip"
-        android:textStyle="bold" />
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/spase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/timestemp"
+        android:gravity="right"
+        android:textSize="10dip"
+        android:textStyle="bold" >
+    </TextView>
 
     <TextView
         android:id="@+id/area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignRight="@+id/title"
-        android:layout_below="@id/title"
-        android:layout_marginTop="1dip"
-        android:text="Area     "
-        android:textColor="#343434"
-        android:textSize="10dip" />
+        android:layout_below="@+id/spase"
+        android:gravity="right"
+        android:text="0.36589"
+        android:textSize="10dip"
+         >
+    </TextView>
 
-    <!-- Rightend Arrow -->
-
-    <ImageView
+    <TextView
+        android:id="@+id/titleite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_toRightOf="@+id/thumbnail"
+        android:gravity="right"
+        android:text="Name Serues"
+        android:textSize="15dip"
+        android:textStyle="bold" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/spase2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleite"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:gravity="right"
+        android:textSize="5dip"
+        android:textStyle="bold" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/routing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spase2"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:gravity="right"
+        android:text="1.23654"
+        android:textSize="10dip"
+        >
+    </TextView>
 
 </RelativeLayout>

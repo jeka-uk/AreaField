@@ -75,7 +75,7 @@ public class ListFragment extends Fragment {
 
 		String [] fromFielsName = new String[] { Constant.COLUMN_SERIES_TIMESTAMP, Constant.COLUMN_SERIES_NAMESERIES, Constant.COLUMN_SERIES_ROUTING, Constant.COLUMN_SERIES_AREAPLOWED};
 
-		int[] toViewIds = new int[] { R.id.timestemp, R.id.title, R.id.routing, R.id.area };
+		int[] toViewIds = new int[] { R.id.timestemp, R.id.titleite, R.id.routing, R.id.area };
 		SimpleCursorAdapter mySimpleCursorAdapter;
 		mySimpleCursorAdapter = new SimpleCursorAdapter(getActivity()
 				.getBaseContext(), R.layout.item_layout, cv,

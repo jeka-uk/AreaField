@@ -153,7 +153,7 @@ public class MainActivityFragment extends Fragment {
 				writedata = false;
 
 				previousLocation = null;
-				distanceTraveled = 0;
+			//	distanceTraveled = 0;
 
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
@@ -169,6 +169,8 @@ public class MainActivityFragment extends Fragment {
 				wakeLock.release();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+				
+				dh.update(series_mov, areaplow, distanceTraveled);
 
 				Cursor cv = dh.getMyWritableDatabase().query(
 						Constant.TABLE_NAME_LOCATION, null, null, null, null,

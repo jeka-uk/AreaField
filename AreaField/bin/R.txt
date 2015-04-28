@@ -347,7 +347,7 @@ int id action_context_bar 0x7f0c0033
 int id action_menu_divider 0x7f0c0002
 int id action_menu_presenter 0x7f0c0003
 int id action_mode_close_button 0x7f0c003a
-int id action_settings 0x7f0c006b
+int id action_settings 0x7f0c006e
 int id activity_chooser_view_content 0x7f0c003b
 int id adjust_height 0x7f0c0006
 int id adjust_width 0x7f0c0007
@@ -400,7 +400,7 @@ int id production 0x7f0c000f
 int id progress_circular 0x7f0c0004
 int id progress_horizontal 0x7f0c0005
 int id radio 0x7f0c0045
-int id routing 0x7f0c0068
+int id routing 0x7f0c006d
 int id routingTextView 0x7f0c005c
 int id run_altitudeTextView 0x7f0c0062
 int id run_durationTextView 0x7f0c005a
@@ -428,6 +428,8 @@ int id showCustom 0x7f0c0022
 int id showHome 0x7f0c0023
 int id showTitle 0x7f0c0024
 int id slide 0x7f0c001d
+int id spase 0x7f0c0069
+int id spase2 0x7f0c006c
 int id split_action_bar 0x7f0c0034
 int id startlistfragment 0x7f0c0055
 int id strict_sandbox 0x7f0c0011
@@ -436,8 +438,9 @@ int id tabMode 0x7f0c001f
 int id tableLayout 0x7f0c0061
 int id terrain 0x7f0c000c
 int id thumbnail 0x7f0c0066
-int id timestemp 0x7f0c0069
+int id timestemp 0x7f0c0068
 int id title 0x7f0c0041
+int id titleite 0x7f0c006b
 int id top_action_bar 0x7f0c0036
 int id up 0x7f0c0037
 int id useLogo 0x7f0c0025

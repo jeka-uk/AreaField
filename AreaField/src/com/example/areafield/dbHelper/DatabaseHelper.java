@@ -1,10 +1,12 @@
 package com.example.areafield.dbHelper;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.example.areafield.Constant;
+import com.example.areafield.R;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -86,8 +88,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		return getWritableDatabase().insert(Constant.TABLE_NAME_LOCATION, null,
 				cv);
-
 	}
+	
+	public int update(long md, float area, float routing ){
+		
+	     DecimalFormat royting = new DecimalFormat("0.0");
+		 DecimalFormat areaplow = new DecimalFormat("0.00000");
+		
+		  ContentValues cv=new ContentValues();
+		  cv.put(Constant.COLUMN_SERIES_ROUTING, String.valueOf(royting.format(routing)));   
+		  cv.put(Constant.COLUMN_SERIES_AREAPLOWED, String.valueOf(areaplow.format(area)));
+		  
+		  return getWritableDatabase().update(Constant.TABLE_NAME_SERIES, cv, Constant.COLUMN_SERIES_ID + " = ?", new String[] {String.valueOf(md) });
+		 }
 	
 	public long insertSeries(Location location) {
 		ContentValues cv = new ContentValues();		
