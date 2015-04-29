@@ -7,6 +7,8 @@ import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -28,6 +30,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,22 +72,12 @@ public class MainActivityFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
+		
+		starGoogleMap();
 
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
-
-		mapFragment = (SupportMapFragment) (getActivity()
-				.getSupportFragmentManager()).findFragmentById(R.id.map);
-		mGoogleMap = mapFragment.getMap();
-
-		if (mGoogleMap == null) {
-
-			getActivity().finish();
-		}
-
-		starGoogleMap();
-
 		/*
 		 * DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
 		 * dh.cleardata(); dh.close();
@@ -153,7 +147,7 @@ public class MainActivityFragment extends Fragment {
 				writedata = false;
 
 				previousLocation = null;
-			//	distanceTraveled = 0;
+				// distanceTraveled = 0;
 
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
@@ -169,7 +163,7 @@ public class MainActivityFragment extends Fragment {
 				wakeLock.release();
 
 				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-				
+
 				dh.update(series_mov, areaplow, distanceTraveled);
 
 				Cursor cv = dh.getMyWritableDatabase().query(
@@ -232,7 +226,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -264,13 +258,27 @@ public class MainActivityFragment extends Fragment {
 
 	public void starGoogleMap() {
 
-		UiSettings uiSettings = mGoogleMap.getUiSettings();
-		uiSettings.setZoomControlsEnabled(true);
-		mGoogleMap.setMyLocationEnabled(true);
-		CameraPosition cameraPosition = new CameraPosition.Builder()
-				.target(new LatLng(48.761043, 30.230563)).zoom(3).build();
-		mGoogleMap.moveCamera(CameraUpdateFactory
-				.newCameraPosition(cameraPosition));
+		mapFragment = new SupportMapFragment() {
+			@Override
+			public void onActivityCreated(Bundle savedInstanceState) {
+				super.onActivityCreated(savedInstanceState);
+				mGoogleMap = mapFragment.getMap();
+				if (mGoogleMap != null) {
+
+					UiSettings uiSettings = mGoogleMap.getUiSettings();
+					uiSettings.setZoomControlsEnabled(true);
+					mGoogleMap.setMyLocationEnabled(true);
+					CameraPosition cameraPosition = new CameraPosition.Builder()
+							.target(new LatLng(48.761043, 30.230563)).zoom(3)
+							.build();
+					mGoogleMap.moveCamera(CameraUpdateFactory
+							.newCameraPosition(cameraPosition));
+				}
+			}
+		};
+		FragmentTransaction transaction = getChildFragmentManager()
+				.beginTransaction();
+		transaction.add(R.id.map, mapFragment).commit();
 	}
 
 	public void movingCamera(Location location) {
