@@ -90,17 +90,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				cv);
 	}
 	
-	public int update(long md, float area, float routing ){
-		
-	     DecimalFormat royting = new DecimalFormat("0.0");
-		 DecimalFormat areaplow = new DecimalFormat("0.00000");
-		
-		  ContentValues cv=new ContentValues();
-		  cv.put(Constant.COLUMN_SERIES_ROUTING, String.valueOf(royting.format(routing)+" "+ "м"));   
-		  cv.put(Constant.COLUMN_SERIES_AREAPLOWED, String.valueOf(areaplow.format(area)+" "+ "га"));
-		  
-		  return getWritableDatabase().update(Constant.TABLE_NAME_SERIES, cv, Constant.COLUMN_SERIES_ID + " = ?", new String[] {String.valueOf(md) });
-		 }
+	public int updatedbSeries(long md, float area, float routing,
+			String nameSeries) {
+
+		DecimalFormat royting = new DecimalFormat("0.0");
+		DecimalFormat areaplow = new DecimalFormat("0.00000");
+
+		ContentValues cv = new ContentValues();
+		cv.put(Constant.COLUMN_SERIES_ROUTING,
+				String.valueOf(royting.format(routing) + " " + "м"));
+		cv.put(Constant.COLUMN_SERIES_AREAPLOWED,
+				String.valueOf(areaplow.format(area) + " " + "га"));
+		cv.put(Constant.COLUMN_SERIES_NAMESERIES, nameSeries);
+
+		return getWritableDatabase().update(Constant.TABLE_NAME_SERIES, cv,
+				Constant.COLUMN_SERIES_ID + " = ?",
+				new String[] { String.valueOf(md) });
+	}
 	
 	public long insertSeries(Location location) {
 		ContentValues cv = new ContentValues();		

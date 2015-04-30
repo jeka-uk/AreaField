@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ListFragment extends Fragment {
@@ -27,16 +26,9 @@ public class ListFragment extends Fragment {
 
 		ListView myListView = (ListView) view.findViewById(R.id.listViewSeries);
 		Button startlist = (Button) view.findViewById(R.id.startlistfragment);
-		// Button finishlist = (Button)
-		// view.findViewById(R.id.finishlistfragment);
 
-		
-		  /*DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-		  dh.cleardata();
-		  dh.close();*/
-		
-
-		TextView rout = (TextView) view.findViewById(R.id.routing);
+		/*DatabaseHelper.getInstance(getActivity()).cleardata();
+		DatabaseHelper.getInstance(getActivity()).close();*/
 
 		viewAllDataSeries(myListView);
 
@@ -71,9 +63,8 @@ public class ListFragment extends Fragment {
 
 	private void viewAllDataSeries(ListView myListView) {
 
-		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-
-		Cursor cv = dh.getAllDataSeries();
+		Cursor cv = DatabaseHelper.getInstance(getActivity())
+				.getAllDataSeries();
 
 		String[] fromFielsName = new String[] {
 				Constant.COLUMN_SERIES_TIMESTAMP,

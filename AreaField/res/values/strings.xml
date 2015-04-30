@@ -10,7 +10,8 @@
     <string name="widthplow">Width plow:</string>
     <string name="inputdataplow">Input width plow</string>
     <string name="areaplowed">Area plowed:</string>
-    <string name="tost_width_plow">"Input width plow in metr"</string>
+    <string name="tost_width_plow">Input width plow in metr</string>
+    <string name="tost_nameSeries">Input name</string>
     <string name="elapsed_time">Elapsed Time:</string>
     <string name="routing">Routing:</string>
      <string name="size_m">м</string>

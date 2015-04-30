@@ -9,7 +9,8 @@
     <string name="longitude">Долгота:</string>
     <string name="widthplow">Захват плуга в м:</string>
     <string name="areaplowed">Площадь:</string>
-    <string name="tost_width_plow">"Введите ширина захвата плуга в м"</string>
+    <string name="tost_width_plow">Введите ширина захвата плуга в м</string>
+    <string name="tost_nameSeries">Введите название</string>
     <string name="elapsed_time">Время работы:</string>
     <string name="routing">Маршрут:</string>
     <string name="nameSeries">Название</string>

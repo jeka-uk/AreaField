@@ -72,16 +72,15 @@ public class MainActivityFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-		
+
 		starGoogleMap();
 
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
-		/*
-		 * DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-		 * dh.cleardata(); dh.close();
-		 */
+
+		/*DatabaseHelper.getInstance(getActivity()).cleardata();
+		DatabaseHelper.getInstance(getActivity()).close();*/
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -162,13 +161,17 @@ public class MainActivityFragment extends Fragment {
 
 				wakeLock.release();
 
-				DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
+				SaveFragment mySecondFragment = new SaveFragment(series_mov,
+						distanceTraveled, areaplow);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, mySecondFragment)
+						.addToBackStack("myBackStack").commit();
 
-				dh.update(series_mov, areaplow, distanceTraveled);
-
-				Cursor cv = dh.getMyWritableDatabase().query(
-						Constant.TABLE_NAME_LOCATION, null, null, null, null,
-						null, null);
+				Cursor cv = DatabaseHelper
+						.getInstance(getActivity())
+						.getMyWritableDatabase()
+						.query(Constant.TABLE_NAME_LOCATION, null, null, null,
+								null, null, null);
 				cv.moveToFirst();
 
 				while (cv.isAfterLast() == false) {
@@ -382,16 +385,16 @@ public class MainActivityFragment extends Fragment {
 
 	private void writeLocationToDB(Location location) {
 
-		DatabaseHelper dh = DatabaseHelper.getInstance(getActivity());
-
 		if (writedata == false) {
 
-			dh.insertSeries(location);
-			dh.close();
+			DatabaseHelper.getInstance(getActivity()).insertSeries(location);
+			DatabaseHelper.getInstance(getActivity()).close();
 
-			Cursor cv = dh.getMyWritableDatabase().query(
-					Constant.TABLE_NAME_SERIES, null, null, null, null, null,
-					null);
+			Cursor cv = DatabaseHelper
+					.getInstance(getActivity())
+					.getMyWritableDatabase()
+					.query(Constant.TABLE_NAME_SERIES, null, null, null, null,
+							null, null);
 			cv.moveToLast();
 
 			series_mov = cv.getLong(cv
@@ -401,8 +404,9 @@ public class MainActivityFragment extends Fragment {
 
 		}
 
-		dh.insertLocation(location, series_mov);
-		dh.close();
+		DatabaseHelper.getInstance(getActivity()).insertLocation(location,
+				series_mov);
+		DatabaseHelper.getInstance(getActivity()).close();
 
 	}
 
