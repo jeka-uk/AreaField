@@ -1,5 +1,8 @@
 package com.example.areafield.fragment;
 
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
@@ -13,12 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class SaveFragment extends Fragment {
 
 	private float mDistanceTraveled, mAreaPlow;
 	private long mSeriesMov;
 	private Button saveSeries;
 	private EditText inputNameSeries;
+	
+	
+	
+	
 
 	public SaveFragment(long mSeriesMov, float mDistanceTraveled,
 			float mAreaPlow) {
@@ -36,6 +44,7 @@ public class SaveFragment extends Fragment {
 
 		saveSeries = (Button) view.findViewById(R.id.saveSeries);
 		inputNameSeries = (EditText) view.findViewById(R.id.inputNameSeries);
+	
 
 		saveSeries.setOnClickListener(new OnClickListener() {
 
