@@ -79,8 +79,10 @@ public class MainActivityFragment extends Fragment {
 				Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
 
-		/*DatabaseHelper.getInstance(getActivity()).cleardata();
-		DatabaseHelper.getInstance(getActivity()).close();*/
+		/*
+		 * DatabaseHelper.getInstance(getActivity()).cleardata();
+		 * DatabaseHelper.getInstance(getActivity()).close();
+		 */
 
 		run_latitudeTextView = (TextView) view
 				.findViewById(R.id.run_latitudeTextView);
@@ -262,6 +264,7 @@ public class MainActivityFragment extends Fragment {
 	public void starGoogleMap() {
 
 		mapFragment = new SupportMapFragment() {
+			
 			@Override
 			public void onActivityCreated(Bundle savedInstanceState) {
 				super.onActivityCreated(savedInstanceState);
@@ -286,11 +289,15 @@ public class MainActivityFragment extends Fragment {
 
 	public void movingCamera(Location location) {
 
-		CameraPosition cameraPosition = new CameraPosition.Builder()
+		CameraPosition position = CameraPosition
+				.builder()
+				.bearing(location.getBearing())
 				.target(new LatLng(location.getLatitude(), location
-						.getLongitude())).zoom(13).bearing(90).build();
+						.getLongitude()))
+				.zoom(mGoogleMap.getCameraPosition().zoom)
+				.tilt(mGoogleMap.getCameraPosition().tilt).build();
 		mGoogleMap.animateCamera(CameraUpdateFactory
-				.newCameraPosition(cameraPosition));
+				.newCameraPosition(position));
 	}
 
 	public void drawCalculateRouting(Location location, TextView textView,
