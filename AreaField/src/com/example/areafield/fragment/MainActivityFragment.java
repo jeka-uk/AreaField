@@ -354,7 +354,7 @@ public class MainActivityFragment extends Fragment {
 						.strokeColor(Color.RED).strokeWidth(10);
 				mGoogleMap.addPolygon(polygoneOptions);
 
-				drawSecondLine(location, widthplow / 2);
+				drawSecondLine(location, widthplow);
 
 			} else {
 
@@ -430,7 +430,7 @@ public class MainActivityFragment extends Fragment {
 
 		if (previousLocationSecond != null) {
 
-			double brng = Math.toRadians(0);
+			double brng = Math.toRadians(-10);
 			double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
 					.getLatitude()))
 					* Math.cos(d)
