@@ -13,10 +13,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -54,7 +58,7 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private Location previousLocation = null;
+	private Location previousLocation = null, previousLocationSecond = null;
 	private WakeLock wakeLock;
 	private boolean gpsFix, firstLocation, writedata;
 
@@ -231,7 +235,7 @@ public class MainActivityFragment extends Fragment {
 
 		movingCamera(location);
 
-		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -264,7 +268,7 @@ public class MainActivityFragment extends Fragment {
 	public void starGoogleMap() {
 
 		mapFragment = new SupportMapFragment() {
-			
+
 			@Override
 			public void onActivityCreated(Bundle savedInstanceState) {
 				super.onActivityCreated(savedInstanceState);
@@ -350,6 +354,8 @@ public class MainActivityFragment extends Fragment {
 						.strokeColor(Color.RED).strokeWidth(10);
 				mGoogleMap.addPolygon(polygoneOptions);
 
+				drawSecondLine(location, widthplow / 2);
+
 			} else {
 
 			}
@@ -414,6 +420,56 @@ public class MainActivityFragment extends Fragment {
 		DatabaseHelper.getInstance(getActivity()).insertLocation(location,
 				series_mov);
 		DatabaseHelper.getInstance(getActivity()).close();
+
+	}
+
+	private void drawSecondLine(Location location, double radius) {
+
+		double R = 6371d;
+		double d = (radius / R) / 1000;
+
+		if (previousLocationSecond != null) {
+
+			double brng = Math.toRadians(0);
+			double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
+					.getLatitude()))
+					* Math.cos(d)
+					+ Math.cos(Math.toRadians(location.getLatitude()))
+					* Math.sin(d) * Math.cos(brng));
+			double longitudeRad = (Math.toRadians(location.getLongitude()) + Math
+					.atan2(Math.sin(brng) * Math.sin(d)
+							* Math.cos(Math.toRadians(location.getLatitude())),
+							Math.cos(d)
+									- Math.sin(Math.toRadians(location
+											.getLatitude()))
+									* Math.sin(latitudeRad)));
+
+			double latitudeRadSecond = Math.asin(Math.sin(Math
+					.toRadians(previousLocationSecond.getLatitude()))
+					* Math.cos(d)
+					+ Math.cos(Math.toRadians(previousLocationSecond
+							.getLatitude())) * Math.sin(d) * Math.cos(brng));
+			double longitudeRadSecond = (Math.toRadians(previousLocationSecond
+					.getLongitude()) + Math.atan2(
+					Math.sin(brng)
+							* Math.sin(d)
+							* Math.cos(Math.toRadians(previousLocationSecond
+									.getLatitude())),
+					Math.cos(d)
+							- Math.sin(Math.toRadians(previousLocationSecond
+									.getLatitude())) * Math.sin(latitudeRad)));
+
+			PolygonOptions polygoneOptions = new PolygonOptions()
+					.add((new LatLng(Math.toDegrees(latitudeRadSecond),
+							Math.toDegrees(longitudeRadSecond))),
+							(new LatLng(Math.toDegrees(latitudeRad), Math
+									.toDegrees(longitudeRad))))
+					.strokeColor(Color.BLUE).strokeWidth(10);
+			mGoogleMap.addPolygon(polygoneOptions);
+
+		}
+
+		previousLocationSecond = location;
 
 	}
 
