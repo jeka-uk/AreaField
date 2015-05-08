@@ -7,21 +7,14 @@ import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -34,7 +27,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +50,7 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private Location previousLocation = null, previousLocationSecond = null;
+	private Location previousLocation = null;
 	private WakeLock wakeLock;
 	private boolean gpsFix, firstLocation, writedata;
 
@@ -231,11 +223,10 @@ public class MainActivityFragment extends Fragment {
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
 		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " "
 				+ getString(R.string.size_spedd));
-		// run_altitudeTextView.setText(Double.toString(location.getAltitude()));
 
 		movingCamera(location);
 
-		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
 
@@ -354,7 +345,7 @@ public class MainActivityFragment extends Fragment {
 						.strokeColor(Color.RED).strokeWidth(10);
 				mGoogleMap.addPolygon(polygoneOptions);
 
-				drawSecondLine(location, widthplow);
+				drawSecondLine(location, previousLocation, widthplow);
 
 			} else {
 
@@ -383,8 +374,6 @@ public class MainActivityFragment extends Fragment {
 			int mins = secs / 60;
 			int hours = secs / 3600;
 			secs = secs % 60;
-
-			// int milliseconds = (int) (updatedTime % 1000);
 
 			run_durationTextView.setText("" + hours + ":"
 					+ String.format("%02d", mins) + ":"
@@ -423,53 +412,48 @@ public class MainActivityFragment extends Fragment {
 
 	}
 
-	private void drawSecondLine(Location location, double radius) {
+	private void drawSecondLine(Location location, Location secondLocation,
+			double radius) {
 
 		double R = 6371d;
 		double d = (radius / R) / 1000;
 
-		if (previousLocationSecond != null) {
+		double brng = Math.toRadians(location.getBearing() + 90);
+		double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
+				.getLatitude()))
+				* Math.cos(d)
+				+ Math.cos(Math.toRadians(location.getLatitude()))
+				* Math.sin(d) * Math.cos(brng));
+		double longitudeRad = (Math.toRadians(location.getLongitude()) + Math
+				.atan2(Math.sin(brng) * Math.sin(d)
+						* Math.cos(Math.toRadians(location.getLatitude())),
+						Math.cos(d)
+								- Math.sin(Math.toRadians(location
+										.getLatitude()))
+								* Math.sin(latitudeRad)));
 
-			double brng = Math.toRadians(-10);
-			double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
-					.getLatitude()))
-					* Math.cos(d)
-					+ Math.cos(Math.toRadians(location.getLatitude()))
-					* Math.sin(d) * Math.cos(brng));
-			double longitudeRad = (Math.toRadians(location.getLongitude()) + Math
-					.atan2(Math.sin(brng) * Math.sin(d)
-							* Math.cos(Math.toRadians(location.getLatitude())),
-							Math.cos(d)
-									- Math.sin(Math.toRadians(location
-											.getLatitude()))
-									* Math.sin(latitudeRad)));
+		double latitudeRadSecond = Math.asin(Math.sin(Math
+				.toRadians(secondLocation.getLatitude()))
+				* Math.cos(d)
+				+ Math.cos(Math.toRadians(secondLocation.getLatitude()))
+				* Math.sin(d) * Math.cos(brng));
+		double longitudeRadSecond = (Math.toRadians(secondLocation
+				.getLongitude()) + Math
+				.atan2(Math.sin(brng)
+						* Math.sin(d)
+						* Math.cos(Math.toRadians(secondLocation.getLatitude())),
+						Math.cos(d)
+								- Math.sin(Math.toRadians(secondLocation
+										.getLatitude()))
+								* Math.sin(latitudeRad)));
 
-			double latitudeRadSecond = Math.asin(Math.sin(Math
-					.toRadians(previousLocationSecond.getLatitude()))
-					* Math.cos(d)
-					+ Math.cos(Math.toRadians(previousLocationSecond
-							.getLatitude())) * Math.sin(d) * Math.cos(brng));
-			double longitudeRadSecond = (Math.toRadians(previousLocationSecond
-					.getLongitude()) + Math.atan2(
-					Math.sin(brng)
-							* Math.sin(d)
-							* Math.cos(Math.toRadians(previousLocationSecond
-									.getLatitude())),
-					Math.cos(d)
-							- Math.sin(Math.toRadians(previousLocationSecond
-									.getLatitude())) * Math.sin(latitudeRad)));
-
-			PolygonOptions polygoneOptions = new PolygonOptions()
-					.add((new LatLng(Math.toDegrees(latitudeRadSecond),
-							Math.toDegrees(longitudeRadSecond))),
-							(new LatLng(Math.toDegrees(latitudeRad), Math
-									.toDegrees(longitudeRad))))
-					.strokeColor(Color.BLUE).strokeWidth(10);
-			mGoogleMap.addPolygon(polygoneOptions);
-
-		}
-
-		previousLocationSecond = location;
+		PolygonOptions polygoneOptions = new PolygonOptions()
+				.add((new LatLng(Math.toDegrees(latitudeRadSecond),
+						Math.toDegrees(longitudeRadSecond))),
+						(new LatLng(Math.toDegrees(latitudeRad), Math
+								.toDegrees(longitudeRad))))
+				.strokeColor(Color.BLUE).strokeWidth(5);
+		mGoogleMap.addPolygon(polygoneOptions);
 
 	}
 
