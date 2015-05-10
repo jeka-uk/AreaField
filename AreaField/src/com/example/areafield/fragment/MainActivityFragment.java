@@ -222,7 +222,8 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " " + getString(R.string.size_spedd));
+		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " "
+				+ getString(R.string.size_spedd));
 
 		movingCamera(location);
 
@@ -270,9 +271,11 @@ public class MainActivityFragment extends Fragment {
 				}
 			}
 		};
+		
+				
 		FragmentTransaction transaction = getChildFragmentManager()
-				.beginTransaction();
-		transaction.add(R.id.map, mapFragment).commit();
+				.beginTransaction().addToBackStack(" ");
+		transaction.replace(R.id.map, mapFragment).commit();
 	}
 
 	public void movingCamera(Location location) {

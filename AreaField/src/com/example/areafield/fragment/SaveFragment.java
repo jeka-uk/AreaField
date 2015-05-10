@@ -67,10 +67,10 @@ public class SaveFragment extends Fragment {
 			DatabaseHelper.getInstance(getActivity()).updatedbSeries(
 					mSeriesMov, mAreaPlow, mDistanceTraveled,
 					inputNameSeries.getText().toString());
-			//getActivity().onBackPressed();
-			ListFragment mySecondFragment = new ListFragment();
+			getActivity().onBackPressed();
+			/*ListFragment mySecondFragment = new ListFragment();
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, mySecondFragment).commit();
+					.replace(R.id.container, mySecondFragment).commit();*/
 
 		}
 
