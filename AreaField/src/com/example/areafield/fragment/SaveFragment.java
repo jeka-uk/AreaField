@@ -6,11 +6,13 @@ import org.androidannotations.annotations.ViewById;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +46,9 @@ public class SaveFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+				
+				InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
 				saveDataSeries();
 
