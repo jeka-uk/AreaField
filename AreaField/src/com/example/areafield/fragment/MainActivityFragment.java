@@ -3,6 +3,7 @@ package com.example.areafield.fragment;
 import java.text.DecimalFormat;
 
 import com.example.areafield.Constant;
+import com.example.areafield.Calculation;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -11,6 +12,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -50,7 +53,7 @@ public class MainActivityFragment extends Fragment {
 	private Button run_startButton, run_stopButton;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private Location previousLocation = null;
+	private Location previousLocation = null, secondLocation = null;
 	private WakeLock wakeLock;
 	private boolean gpsFix, firstLocation, writedata;
 
@@ -184,9 +187,7 @@ public class MainActivityFragment extends Fragment {
 
 					cv.moveToNext();
 				}
-
 			}
-
 		});
 
 		return view;
@@ -221,39 +222,31 @@ public class MainActivityFragment extends Fragment {
 
 		run_latitudeTextView.setText(Double.toString(location.getLatitude()));
 		run_longitudeTextView.setText(Double.toString(location.getLongitude()));
-		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " "
-				+ getString(R.string.size_spedd));
+		run_speedTextView.setText(dec.format(location.getSpeed() * 3.6) + " " + getString(R.string.size_spedd));
 
 		movingCamera(location);
 
-		if (location.getSpeed() == 0 && location.getAccuracy() <= 8) {
+		if (location.getSpeed() > 0 && location.getAccuracy() <= 8) {
 
 			if (gpsFix == true) {
-
 				// start timer
 				startTime = SystemClock.uptimeMillis();
 				customHandler.postDelayed(updateTimerThread, 0);
-
 				gpsFix = false;
 			}
 
-			drawCalculateRouting(location, routingTextView, "draw");
-
+			drawCalculateRouting(location, routingTextView, areaplowed, "draw");
 			writeLocationToDB(location);
 
 		} else {
 
 			if (gpsFix == false) {
-
 				// pause timer
 				timeSwapBuff += timeInMilliseconds;
 				customHandler.removeCallbacks(updateTimerThread);
-
 				gpsFix = true;
 			}
-
 		}
-
 	}
 
 	public void starGoogleMap() {
@@ -295,7 +288,8 @@ public class MainActivityFragment extends Fragment {
 				.newCameraPosition(position));
 	}
 
-	public void drawCalculateRouting(Location location, TextView textView,
+	public void drawCalculateRouting(Location location,
+			TextView distanceTextView, TextView areaplowedTextView,
 			String choice) {
 
 		// Log.d(LOG_TAG, "Location " + location);
@@ -308,32 +302,17 @@ public class MainActivityFragment extends Fragment {
 					.position(startLocation).icon(
 							BitmapDescriptorFactory
 									.fromResource(R.drawable.testmarker)));
-
 			firstLocation = false;
-
 		}
 
 		if (previousLocation != null) {
 
-			double lat1 = location.getLatitude();
-			double lon1 = location.getLongitude();
-			double lat2 = previousLocation.getLatitude();
-			double lon2 = previousLocation.getLongitude();
-			double R = 6371; // km
-			double dLat = (lat2 - lat1) * Math.PI / 180;
-			double dLon = (lon2 - lon1) * Math.PI / 180;
-			lat1 = lat1 * Math.PI / 180;
-			lat2 = lat2 * Math.PI / 180;
+			Calculation mCoordinates = new Calculation();
 
-			double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-					+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1)
-					* Math.cos(lat2);
-			double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-			double d = R * c * 1000;
+			distanceTraveled += mCoordinates
+					.routing(location, previousLocation);
 
-			distanceTraveled += d;
-
-			areaplow += (d * widthplow) / 10000;
+			areaplow += (mCoordinates.routing(location, previousLocation) * widthplow) / 10000;
 
 			if (choice == "draw") {
 
@@ -345,7 +324,7 @@ public class MainActivityFragment extends Fragment {
 						.strokeColor(Color.RED).strokeWidth(10);
 				mGoogleMap.addPolygon(polygoneOptions);
 
-				drawSecondLine(location, previousLocation, widthplow);
+				drawSecondLine(location, widthplow);
 
 			} else {
 
@@ -355,10 +334,10 @@ public class MainActivityFragment extends Fragment {
 
 		previousLocation = location;
 
-		textView.setText(dec.format(distanceTraveled) + " "
+		distanceTextView.setText(dec.format(distanceTraveled) + " "
 				+ getString(R.string.size_m));
 
-		areaplowed.setText(decSecond.format(areaplow) + " "
+		areaplowedTextView.setText(decSecond.format(areaplow) + " "
 				+ getString(R.string.size_g));
 
 	}
@@ -412,48 +391,21 @@ public class MainActivityFragment extends Fragment {
 
 	}
 
-	private void drawSecondLine(Location location, Location secondLocation,
-			double radius) {
+	private void drawSecondLine(Location location, double radius) {
 
-		double R = 6371d;
-		double d = (radius / R) / 1000;
+		if (secondLocation != null) {
 
-		double brng = Math.toRadians(location.getBearing() + 90);
-		double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
-				.getLatitude()))
-				* Math.cos(d)
-				+ Math.cos(Math.toRadians(location.getLatitude()))
-				* Math.sin(d) * Math.cos(brng));
-		double longitudeRad = (Math.toRadians(location.getLongitude()) + Math
-				.atan2(Math.sin(brng) * Math.sin(d)
-						* Math.cos(Math.toRadians(location.getLatitude())),
-						Math.cos(d)
-								- Math.sin(Math.toRadians(location
-										.getLatitude()))
-								* Math.sin(latitudeRad)));
+			Calculation mCoordinates = new Calculation();
+			PolygonOptions polygoneOptions = new PolygonOptions()
+					.add((mCoordinates.coordinatesSecondLine(location, radius)),
+							(mCoordinates.coordinatesSecondLine(secondLocation,
+									radius))).strokeColor(Color.BLUE)
+					.strokeWidth(5);
+			mGoogleMap.addPolygon(polygoneOptions);
 
-		double latitudeRadSecond = Math.asin(Math.sin(Math
-				.toRadians(secondLocation.getLatitude()))
-				* Math.cos(d)
-				+ Math.cos(Math.toRadians(secondLocation.getLatitude()))
-				* Math.sin(d) * Math.cos(brng));
-		double longitudeRadSecond = (Math.toRadians(secondLocation
-				.getLongitude()) + Math
-				.atan2(Math.sin(brng)
-						* Math.sin(d)
-						* Math.cos(Math.toRadians(secondLocation.getLatitude())),
-						Math.cos(d)
-								- Math.sin(Math.toRadians(secondLocation
-										.getLatitude()))
-								* Math.sin(latitudeRad)));
+		}
 
-		PolygonOptions polygoneOptions = new PolygonOptions()
-				.add((new LatLng(Math.toDegrees(latitudeRadSecond),
-						Math.toDegrees(longitudeRadSecond))),
-						(new LatLng(Math.toDegrees(latitudeRad), Math
-								.toDegrees(longitudeRad))))
-				.strokeColor(Color.BLUE).strokeWidth(5);
-		mGoogleMap.addPolygon(polygoneOptions);
+		secondLocation = location;
 
 	}
 
