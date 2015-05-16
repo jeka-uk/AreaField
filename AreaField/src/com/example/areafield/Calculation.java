@@ -6,12 +6,12 @@ import android.location.Location;
 
 public class Calculation {
 
-	public LatLng coordinatesSecondLine(Location location, double radius) {
+	public LatLng coordinatesSecondLine(Location location, double radius, double n) {
 
 		double R = 6371d;
-		double d = (radius / R) / 1000;
+		double d = (radius / R) / 1000;		
 		
-		double brng = Math.toRadians(location.getBearing() + 90);
+		double brng = Math.toRadians(location.getBearing() + n);
 		double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
 				.getLatitude()))
 				* Math.cos(d)

@@ -409,11 +409,20 @@ public class MainActivityFragment extends Fragment {
 
 			Calculation mCoordinates = new Calculation();
 			PolygonOptions polygoneOptions = new PolygonOptions()
-					.add((mCoordinates.coordinatesSecondLine(location, radius)),
+					.add((mCoordinates.coordinatesSecondLine(location, radius,
+							90)),
 							(mCoordinates.coordinatesSecondLine(secondLocation,
-									radius))).strokeColor(Color.BLUE)
+									radius, 90))).strokeColor(Color.BLUE)
 					.strokeWidth(5);
 			mGoogleMap.addPolygon(polygoneOptions);
+
+			PolygonOptions polygoneOptionsSecond = new PolygonOptions()
+					.add((mCoordinates.coordinatesSecondLine(location, radius,
+							-90)),
+							(mCoordinates.coordinatesSecondLine(secondLocation,
+									radius, -90))).strokeColor(Color.BLUE)
+					.strokeWidth(5);
+			mGoogleMap.addPolygon(polygoneOptionsSecond);
 
 		}
 
