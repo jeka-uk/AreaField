@@ -3,6 +3,7 @@ package com.example.areafield.fragment;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import com.example.areafield.OnBackPressedListener;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
@@ -18,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SaveFragment extends Fragment {
+public class SaveFragment extends Fragment implements OnBackPressedListener{
 
 	private float mDistanceTraveled, mAreaPlow;
 	private long mSeriesMov;
@@ -71,13 +72,24 @@ public class SaveFragment extends Fragment {
 
 			DatabaseHelper.getInstance(getActivity()).updatedbSeries(
 					mSeriesMov, mAreaPlow, mDistanceTraveled,
-					inputNameSeries.getText().toString());
-			getActivity().onBackPressed();
+					inputNameSeries.getText().toString());			
 			/*ListFragment mySecondFragment = new ListFragment();
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, mySecondFragment).commit();*/
-
+					.replace(R.id.container, mySecondFragment).commit();
+*/
 		}
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		
+		MainActivityFragment mySecondFragment = new MainActivityFragment();
+		getFragmentManager().beginTransaction()
+				.replace(R.id.container, mySecondFragment).commit();
+
+
+
+		
 	}
 }

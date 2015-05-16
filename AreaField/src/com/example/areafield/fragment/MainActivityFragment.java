@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 
 import com.example.areafield.Constant;
 import com.example.areafield.Calculation;
+import com.example.areafield.OnBackPressedListener;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +25,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -31,6 +33,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +44,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements OnBackPressedListener {
 
 	// private final String LOG_TAG = "myLogs";
 
@@ -67,14 +70,15 @@ public class MainActivityFragment extends Fragment {
 
 	private DecimalFormat dec = new DecimalFormat("0.0");
 	private DecimalFormat decSecond = new DecimalFormat("0.00000");
-
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-
+			
 		starGoogleMap();
-
+	
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
@@ -193,8 +197,11 @@ public class MainActivityFragment extends Fragment {
 					cv.moveToNext();
 				}
 			}
-		});
-
+		});		
+		
+		
+		
+		
 		return view;
 	}
 
@@ -279,8 +286,8 @@ public class MainActivityFragment extends Fragment {
 		
 				
 		FragmentTransaction transaction = getChildFragmentManager()
-				.beginTransaction().addToBackStack(" ");
-		transaction.replace(R.id.map, mapFragment).commit();
+				.beginTransaction();
+		transaction.replace(R.id.map, mapFragment).addToBackStack(null).commit();
 	}
 
 	public void movingCamera(Location location) {
@@ -417,4 +424,19 @@ public class MainActivityFragment extends Fragment {
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		
+		//getActivity().finish();
+		mLocationManager.removeUpdates(locationListener);
+		
+		ListFragment mySecondFragment = new ListFragment();
+		getFragmentManager().beginTransaction()
+				.replace(R.id.container, mySecondFragment).commit();
+		
+	}
+	
+	 
+	
 }
