@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.example.areafield.Constant;
-import com.example.areafield.R;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -60,7 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// Create table series
 		db.execSQL("create table series ("
 				+ "_id integer primary key autoincrement,"
-				+ "timestamp integer," + "nameseries text," + "routing integer," + "areaplowed integer" + ");");
+				+ "timestamp integer," + "nameseries text,"
+				+ "routing integer," + "areaplowed integer" + ");");
 
 		// Create table location
 		db.execSQL("create table location ("
@@ -89,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return getWritableDatabase().insert(Constant.TABLE_NAME_LOCATION, null,
 				cv);
 	}
-	
+
 	public int updatedbSeries(long md, float area, float routing,
 			String nameSeries) {
 
@@ -107,10 +106,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Constant.COLUMN_SERIES_ID + " = ?",
 				new String[] { String.valueOf(md) });
 	}
-	
+
 	public long insertSeries(Location location) {
-		ContentValues cv = new ContentValues();		
-		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, String.valueOf(createDate(location.getTime())));
+		ContentValues cv = new ContentValues();
+		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP,
+				String.valueOf(createDate(location.getTime())));
 
 		return getWritableDatabase().insert(Constant.TABLE_NAME_SERIES, null,
 				cv);
@@ -124,24 +124,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		getMyWritableDatabase().execSQL("delete from " + "sqlite_sequence");
 
 	}
-	
-	public Cursor getAllDataSeries(){
-		
-		Cursor cv = getMyWritableDatabase().query(
-				Constant.TABLE_NAME_SERIES, null, null, null, null,
-				null, null);
-		
+
+	public Cursor getAllDataSeries() {
+
+		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME_SERIES,
+				null, null, null, null, null, null);
+
 		return cv;
-		
+
 	}
-	
+
 	public static CharSequence createDate(long timestamp) {
-	    Calendar c = Calendar.getInstance();
-	    c.setTimeInMillis(timestamp);
-	    Date d = c.getTime();
-	    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-	    return sdf.format(d);
-	  }
-	
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(timestamp);
+		Date d = c.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		return sdf.format(d);
+	}
 
 }

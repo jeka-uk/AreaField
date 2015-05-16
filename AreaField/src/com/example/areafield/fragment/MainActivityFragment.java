@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 
 import com.example.areafield.Constant;
 import com.example.areafield.Calculation;
-import com.example.areafield.OnBackPressedListener;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,19 +12,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -33,18 +30,16 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivityFragment extends Fragment implements OnBackPressedListener {
+public class MainActivityFragment extends Fragment {
 
 	// private final String LOG_TAG = "myLogs";
 
@@ -70,15 +65,14 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 
 	private DecimalFormat dec = new DecimalFormat("0.0");
 	private DecimalFormat decSecond = new DecimalFormat("0.00000");
-	
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-			
+
 		starGoogleMap();
-	
+
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My wakeloo");
@@ -110,10 +104,14 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 
 			@Override
 			public void onClick(View v) {
-				
-				
-			/*	InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);*/
+
+				/*
+				 * InputMethodManager inputMethodManager = (InputMethodManager)
+				 * getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				 * inputMethodManager
+				 * .hideSoftInputFromWindow(getActivity().getCurrentFocus
+				 * ().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				 */
 
 				if (widthPlow.getText().length() == 0) {
 
@@ -175,7 +173,7 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 						distanceTraveled, areaplow);
 				getFragmentManager().beginTransaction()
 						.replace(R.id.container, mySecondFragment)
-						.addToBackStack("myBackStack").commit();
+						.addToBackStack("MyBackStack").commit();
 
 				Cursor cv = DatabaseHelper
 						.getInstance(getActivity())
@@ -197,11 +195,8 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 					cv.moveToNext();
 				}
 			}
-		});		
-		
-		
-		
-		
+		});
+
 		return view;
 	}
 
@@ -269,6 +264,7 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 			@Override
 			public void onActivityCreated(Bundle savedInstanceState) {
 				super.onActivityCreated(savedInstanceState);
+
 				mGoogleMap = mapFragment.getMap();
 				if (mGoogleMap != null) {
 
@@ -283,11 +279,12 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 				}
 			}
 		};
-		
-				
+
 		FragmentTransaction transaction = getChildFragmentManager()
 				.beginTransaction();
-		transaction.replace(R.id.map, mapFragment).addToBackStack(null).commit();
+		transaction.replace(R.id.map, mapFragment).addToBackStack(null)
+				.commit();
+
 	}
 
 	public void movingCamera(Location location) {
@@ -425,18 +422,9 @@ public class MainActivityFragment extends Fragment implements OnBackPressedListe
 	}
 
 	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		
-		//getActivity().finish();
+	public void onStop() {
+		super.onStop();
 		mLocationManager.removeUpdates(locationListener);
-		
-		ListFragment mySecondFragment = new ListFragment();
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, mySecondFragment).commit();
-		
 	}
-	
-	 
-	
+
 }

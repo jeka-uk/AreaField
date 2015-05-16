@@ -1,15 +1,12 @@
 package com.example.areafield.fragment;
 
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
-
-import com.example.areafield.OnBackPressedListener;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SaveFragment extends Fragment implements OnBackPressedListener{
+public class SaveFragment extends Fragment {
 
 	private float mDistanceTraveled, mAreaPlow;
 	private long mSeriesMov;
@@ -47,9 +44,12 @@ public class SaveFragment extends Fragment implements OnBackPressedListener{
 
 			@Override
 			public void onClick(View v) {
-				
-				InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+				InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputMethodManager.hideSoftInputFromWindow(getActivity()
+						.getCurrentFocus().getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
 
 				saveDataSeries();
 
@@ -72,24 +72,18 @@ public class SaveFragment extends Fragment implements OnBackPressedListener{
 
 			DatabaseHelper.getInstance(getActivity()).updatedbSeries(
 					mSeriesMov, mAreaPlow, mDistanceTraveled,
-					inputNameSeries.getText().toString());			
-			/*ListFragment mySecondFragment = new ListFragment();
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, mySecondFragment).commit();
-*/
+					inputNameSeries.getText().toString());
+
+			FragmentManager manager = getFragmentManager();
+			if (manager.getBackStackEntryCount() > 0) {
+				FragmentManager.BackStackEntry first = manager
+						.getBackStackEntryAt(0);
+				manager.popBackStack(first.getId(),
+						FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			}
+
 		}
 
 	}
 
-	@Override
-	public void onBackPressed() {
-		
-		MainActivityFragment mySecondFragment = new MainActivityFragment();
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, mySecondFragment).commit();
-
-
-
-		
-	}
 }

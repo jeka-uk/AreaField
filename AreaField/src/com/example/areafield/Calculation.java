@@ -10,7 +10,7 @@ public class Calculation {
 
 		double R = 6371d;
 		double d = (radius / R) / 1000;
-
+		
 		double brng = Math.toRadians(location.getBearing() + 90);
 		double latitudeRad = Math.asin(Math.sin(Math.toRadians(location
 				.getLatitude()))
