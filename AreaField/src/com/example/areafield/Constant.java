@@ -20,7 +20,9 @@ public class Constant {
 	public static final String COLUMN_SERIES_ROUTING = "routing";
 	public static final String COLUMN_SERIES_AREAPLOWED = "areaplowed";
 	
-	public static final int RESOLVE_CONNECTION_REQUEST_CODE = 1;
+	public static final int RESOLVE_CONNECTION_REQUEST_CODE = 0;	
+	public static final String NAME_FOLDER = "Area Field";
+	
 	
 	
 

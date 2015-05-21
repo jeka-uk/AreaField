@@ -13,9 +13,12 @@ import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.MetadataChangeSet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -100,9 +103,7 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 
 		if (inputNameSeries.getText().length() == 0) {
 
-			Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-					getString(R.string.tost_nameSeries), Toast.LENGTH_SHORT);
-			toast.show();
+			showMessage(getString(R.string.tost_nameSeries));
 
 		} else {
 
@@ -125,6 +126,8 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 
+		showMessage("Connect failed");
+
 		if (connectionResult.hasResolution()) {
 			try {
 				connectionResult.startResolutionForResult(getActivity(),
@@ -135,14 +138,21 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 		} else {
 			GooglePlayServicesUtil.getErrorDialog(
 					connectionResult.getErrorCode(), getActivity(), 0).show();
+			
 		}
 
 	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		// TODO Auto-generated method stub
 
+		showMessage("Connect to Goodle Drive");
+
+		MetadataChangeSet changeSet = new MetadataChangeSet.Builder().setTitle(
+				Constant.NAME_FOLDER).build();
+		Drive.DriveApi.getRootFolder(getGoogleApiClient())
+				.createFolder(getGoogleApiClient(), changeSet)
+				.setResultCallback(folderCreatedCallback);
 	}
 
 	@Override
@@ -151,4 +161,25 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 
 	}
 
+	public GoogleApiClient getGoogleApiClient() {
+		return mGoogleApiClient;
+	}
+
+	public void showMessage(String message) {
+		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+	}
+
+	ResultCallback<DriveFolderResult> folderCreatedCallback = new ResultCallback<DriveFolderResult>() {
+		@Override
+		public void onResult(DriveFolderResult result) {
+			if (!result.getStatus().isSuccess()) {
+				showMessage("Error while trying to create the folder");
+				return;
+			}
+			showMessage("Created a folder: "
+					+ result.getDriveFolder().getDriveId());
+		}
+	};
+
+	
 }

@@ -27,8 +27,10 @@ public class ListFragment extends Fragment {
 		ListView myListView = (ListView) view.findViewById(R.id.listViewSeries);
 		Button startlist = (Button) view.findViewById(R.id.startlistfragment);
 
-		/*DatabaseHelper.getInstance(getActivity()).cleardata();
-		DatabaseHelper.getInstance(getActivity()).close();*/
+		/*
+		 * DatabaseHelper.getInstance(getActivity()).cleardata();
+		 * DatabaseHelper.getInstance(getActivity()).close();
+		 */
 
 		viewAllDataSeries(myListView);
 
@@ -51,10 +53,7 @@ public class ListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				Toast toast = Toast.makeText(getActivity()
-						.getApplicationContext(), String.valueOf(parent
-						.getItemIdAtPosition(position)), Toast.LENGTH_SHORT);
-				toast.show();
+				showMessage(String.valueOf(parent.getItemIdAtPosition(position)));
 			}
 		});
 
@@ -80,6 +79,10 @@ public class ListFragment extends Fragment {
 				toViewIds, 0);
 		myListView.setAdapter(mySimpleCursorAdapter);
 
+	}
+
+	public void showMessage(String message) {
+		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 	}
 
 }
