@@ -133,6 +133,7 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 				connectionResult.startResolutionForResult(getActivity(),
 						Constant.RESOLVE_CONNECTION_REQUEST_CODE);
 			} catch (IntentSender.SendIntentException e) {
+				
 
 			}
 		} else {
@@ -140,6 +141,9 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 					connectionResult.getErrorCode(), getActivity(), 0).show();
 			
 		}
+		
+		mGoogleApiClient.disconnect();
+		mGoogleApiClient.connect();
 
 	}
 
