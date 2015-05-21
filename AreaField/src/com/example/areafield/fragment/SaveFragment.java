@@ -157,7 +157,7 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 
 	@Override
 	public void onConnectionSuspended(int cause) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
