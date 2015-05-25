@@ -206,7 +206,8 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 	            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
 	                    .setTitle("MyNewFolder").build();
 	            folder.createFolder(getGoogleApiClient(), changeSet)
-	                    .setResultCallback(createFolderCallback);
+	                    .setResultCallback(createFolderCallback);	           
+	            	            
 	        }
 	    };
 	    
@@ -232,11 +233,9 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 				}
 				showMessage("Created a folder: "
 						+ result.getDriveFolder().getDriveId());
-				
 
-				Drive.DriveApi.fetchDriveId(getGoogleApiClient(), String.valueOf(result.getDriveFolder().getDriveId()))
+				Drive.DriveApi.fetchDriveId(getGoogleApiClient(), "0B98U7OqShYYURTQ5OHpXdGEwWVE")
 		        .setResultCallback(idCallback);
-				
 				
 			}
 		};
