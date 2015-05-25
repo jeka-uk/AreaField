@@ -1,6 +1,6 @@
 package com.example.areafield.fragment;
 
-import com.example.areafield.Constant;
+import com.example.areafield.Constants;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
 import com.google.android.gms.common.ConnectionResult;
@@ -10,15 +10,19 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
-import com.google.android.gms.drive.DriveContents;
-import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveApi.DriveIdResult;
+import com.google.android.gms.drive.DriveApi.MetadataBufferResult;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,6 +46,9 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 	private EditText inputNameSeries;
 
 	private GoogleApiClient mGoogleApiClient;
+	
+	//public static final String EXISTING_FOLDER_ID = "0B98U7OqShYYUNlh1N1JZc01YV3M";//changed this
+    
 
 	public SaveFragment(long mSeriesMov, float mDistanceTraveled,
 			float mAreaPlow) {
@@ -59,11 +66,6 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 
 		saveSeries = (Button) view.findViewById(R.id.saveSeries);
 		inputNameSeries = (EditText) view.findViewById(R.id.inputNameSeries);
-
-		mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-				.addApi(Drive.API).addScope(Drive.SCOPE_FILE)
-				.addConnectionCallbacks(this)
-				.addOnConnectionFailedListener(this).build();
 
 		saveSeries.setOnClickListener(new OnClickListener() {
 
@@ -89,14 +91,32 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 	public void onStart() {
 		super.onStart();
 
+		if (mGoogleApiClient == null) {
+			mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+					.addApi(Drive.API).addScope(Drive.SCOPE_FILE)
+					.addConnectionCallbacks(this)
+					.addOnConnectionFailedListener(this).build();
+		}
+		mGoogleApiClient.connect();
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		if (mGoogleApiClient == null) {
+		}
 		mGoogleApiClient.connect();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient.disconnect();
+		}
 
-		mGoogleApiClient.disconnect();
 	}
 
 	private void saveDataSeries() {
@@ -131,20 +151,16 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 		if (connectionResult.hasResolution()) {
 			try {
 				connectionResult.startResolutionForResult(getActivity(),
-						Constant.RESOLVE_CONNECTION_REQUEST_CODE);
+						Constants.RESOLVE_CONNECTION_REQUEST_CODE);
 			} catch (IntentSender.SendIntentException e) {
-				
 
 			}
 		} else {
 			GooglePlayServicesUtil.getErrorDialog(
 					connectionResult.getErrorCode(), getActivity(), 0).show();
-			
-		}
-		
-		mGoogleApiClient.disconnect();
-		mGoogleApiClient.connect();
+			return;
 
+		}
 	}
 
 	@Override
@@ -152,16 +168,11 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 
 		showMessage("Connect to Goodle Drive");
 
-		MetadataChangeSet changeSet = new MetadataChangeSet.Builder().setTitle(
-				Constant.NAME_FOLDER).build();
-		Drive.DriveApi.getRootFolder(getGoogleApiClient())
-				.createFolder(getGoogleApiClient(), changeSet)
-				.setResultCallback(folderCreatedCallback);
+		downUplodingToDrive();
 	}
 
 	@Override
 	public void onConnectionSuspended(int cause) {
-		
 
 	}
 
@@ -173,17 +184,64 @@ public class SaveFragment extends Fragment implements ConnectionCallbacks,
 		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 	}
 
-	ResultCallback<DriveFolderResult> folderCreatedCallback = new ResultCallback<DriveFolderResult>() {
-		@Override
-		public void onResult(DriveFolderResult result) {
-			if (!result.getStatus().isSuccess()) {
-				showMessage("Error while trying to create the folder");
-				return;
+	private void downUplodingToDrive() {
+		
+		MetadataChangeSet changeSet = new MetadataChangeSet.Builder().setTitle(
+				Constants.NAME_FOLDER).build();
+		Drive.DriveApi.getRootFolder(getGoogleApiClient())
+				.createFolder(getGoogleApiClient(), changeSet)
+				.setResultCallback(folderCreatedCallback);
+				
+	}
+
+	 final ResultCallback<DriveIdResult> idCallback = new ResultCallback<DriveIdResult>() {
+	        @Override
+	        public void onResult(DriveIdResult result) {
+	            if (!result.getStatus().isSuccess()) {
+	                showMessage("Cannot find DriveId. Are you authorized to view this file?");
+	                return;
+	            }
+	            DriveFolder folder = Drive.DriveApi
+	                    .getFolder(getGoogleApiClient(), result.getDriveId());
+	            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+	                    .setTitle("MyNewFolder").build();
+	            folder.createFolder(getGoogleApiClient(), changeSet)
+	                    .setResultCallback(createFolderCallback);
+	        }
+	    };
+	    
+	    final ResultCallback<DriveFolderResult> createFolderCallback = new
+	            ResultCallback<DriveFolderResult>() {
+
+	        @Override
+	        public void onResult(DriveFolderResult result) {
+	            if (!result.getStatus().isSuccess()) {
+	                showMessage("Problem while trying to create a folder");
+	                return;
+	            }
+	            showMessage("Folder successfully created");
+	        }
+	    };
+	    
+	    ResultCallback<DriveFolderResult> folderCreatedCallback = new ResultCallback<DriveFolderResult>() {
+			@Override
+			public void onResult(DriveFolderResult result) {
+				if (!result.getStatus().isSuccess()) {
+					showMessage("Error while trying to create the folder");
+					return;
+				}
+				showMessage("Created a folder: "
+						+ result.getDriveFolder().getDriveId());
+				
+
+				Drive.DriveApi.fetchDriveId(getGoogleApiClient(), String.valueOf(result.getDriveFolder().getDriveId()))
+		        .setResultCallback(idCallback);
+				
+				
 			}
-			showMessage("Created a folder: "
-					+ result.getDriveFolder().getDriveId());
-		}
-	};
+		};
 
 	
+	
+
 }

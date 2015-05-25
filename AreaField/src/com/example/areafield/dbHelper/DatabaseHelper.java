@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.example.areafield.Constant;
+import com.example.areafield.Constants;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -77,15 +77,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public long insertLocation(Location location, long series_mov) {
 		ContentValues cv = new ContentValues();
-		cv.put(Constant.COLUMN_LOCATION_LATITUDE, location.getLatitude());
-		cv.put(Constant.COLUMN_LOCATION_LONGITUDE, location.getLongitude());
-		cv.put(Constant.COLUMN_LOCATION_ALTITUDE, location.getAltitude());
-		cv.put(Constant.COLUMN_LOCATION_SPEED, location.getSpeed());
-		cv.put(Constant.COLUMN_LOCATION_PROVIDER, location.getProvider());
-		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP, location.getTime());
-		cv.put(Constant.COLUMN_LOCATION_SERIES_MOV, series_mov);
+		cv.put(Constants.COLUMN_LOCATION_LATITUDE, location.getLatitude());
+		cv.put(Constants.COLUMN_LOCATION_LONGITUDE, location.getLongitude());
+		cv.put(Constants.COLUMN_LOCATION_ALTITUDE, location.getAltitude());
+		cv.put(Constants.COLUMN_LOCATION_SPEED, location.getSpeed());
+		cv.put(Constants.COLUMN_LOCATION_PROVIDER, location.getProvider());
+		cv.put(Constants.COLUMN_LOCATION_TIMESTAMP, location.getTime());
+		cv.put(Constants.COLUMN_LOCATION_SERIES_MOV, series_mov);
 
-		return getWritableDatabase().insert(Constant.TABLE_NAME_LOCATION, null,
+		return getWritableDatabase().insert(Constants.TABLE_NAME_LOCATION, null,
 				cv);
 	}
 
@@ -96,23 +96,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		DecimalFormat areaplow = new DecimalFormat("0.00000");
 
 		ContentValues cv = new ContentValues();
-		cv.put(Constant.COLUMN_SERIES_ROUTING,
+		cv.put(Constants.COLUMN_SERIES_ROUTING,
 				String.valueOf(royting.format(routing) + " " + "м"));
-		cv.put(Constant.COLUMN_SERIES_AREAPLOWED,
+		cv.put(Constants.COLUMN_SERIES_AREAPLOWED,
 				String.valueOf(areaplow.format(area) + " " + "га"));
-		cv.put(Constant.COLUMN_SERIES_NAMESERIES, nameSeries);
+		cv.put(Constants.COLUMN_SERIES_NAMESERIES, nameSeries);
 
-		return getWritableDatabase().update(Constant.TABLE_NAME_SERIES, cv,
-				Constant.COLUMN_SERIES_ID + " = ?",
+		return getWritableDatabase().update(Constants.TABLE_NAME_SERIES, cv,
+				Constants.COLUMN_SERIES_ID + " = ?",
 				new String[] { String.valueOf(md) });
 	}
 
 	public long insertSeries(Location location) {
 		ContentValues cv = new ContentValues();
-		cv.put(Constant.COLUMN_LOCATION_TIMESTAMP,
+		cv.put(Constants.COLUMN_LOCATION_TIMESTAMP,
 				String.valueOf(createDate(location.getTime())));
 
-		return getWritableDatabase().insert(Constant.TABLE_NAME_SERIES, null,
+		return getWritableDatabase().insert(Constants.TABLE_NAME_SERIES, null,
 				cv);
 
 	}
@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor getAllDataSeries() {
 
-		Cursor cv = getMyWritableDatabase().query(Constant.TABLE_NAME_SERIES,
+		Cursor cv = getMyWritableDatabase().query(Constants.TABLE_NAME_SERIES,
 				null, null, null, null, null, null);
 
 		return cv;

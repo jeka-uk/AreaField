@@ -2,7 +2,7 @@ package com.example.areafield.fragment;
 
 import java.text.DecimalFormat;
 
-import com.example.areafield.Constant;
+import com.example.areafield.Constants;
 import com.example.areafield.Calculation;
 import com.example.areafield.R;
 import com.example.areafield.dbHelper.DatabaseHelper;
@@ -178,7 +178,7 @@ public class MainActivityFragment extends Fragment {
 				Cursor cv = DatabaseHelper
 						.getInstance(getActivity())
 						.getMyWritableDatabase()
-						.query(Constant.TABLE_NAME_LOCATION, null, null, null,
+						.query(Constants.TABLE_NAME_LOCATION, null, null, null,
 								null, null, null);
 				cv.moveToFirst();
 
@@ -186,9 +186,9 @@ public class MainActivityFragment extends Fragment {
 
 					Location locationDB = new Location("location from db");
 					locationDB.setLatitude(cv.getDouble(cv
-							.getColumnIndex(Constant.COLUMN_LOCATION_LATITUDE)));
+							.getColumnIndex(Constants.COLUMN_LOCATION_LATITUDE)));
 					locationDB.setLongitude(cv.getDouble(cv
-							.getColumnIndex(Constant.COLUMN_LOCATION_LONGITUDE)));
+							.getColumnIndex(Constants.COLUMN_LOCATION_LONGITUDE)));
 
 					// drawCalculateRouting(locationDB, null, null);
 
@@ -386,12 +386,12 @@ public class MainActivityFragment extends Fragment {
 			Cursor cv = DatabaseHelper
 					.getInstance(getActivity())
 					.getMyWritableDatabase()
-					.query(Constant.TABLE_NAME_SERIES, null, null, null, null,
+					.query(Constants.TABLE_NAME_SERIES, null, null, null, null,
 							null, null);
 			cv.moveToLast();
 
 			series_mov = cv.getLong(cv
-					.getColumnIndex(Constant.COLUMN_SERIES_ID));
+					.getColumnIndex(Constants.COLUMN_SERIES_ID));
 
 			writedata = true;
 
